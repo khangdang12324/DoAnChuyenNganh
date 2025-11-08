@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IDE Online</title>
+
+    <link rel="stylesheet" href="assets/style.css" />
+
+    <!--- ACE Editor --->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.3/ace.js"
+        integrity="sha512-E9c0L2j3f33xK4oQj5I5R4y0bKx9D7Hc2A9+Qh8wE8iQ9E6yFqHkz3TqiFjZc1R3F1y7v2j8KpR2vF7b1m3yiA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.3/ext-language_tools.min.js"></script>
+
+    <!--- JSZip --->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+
+<body class="theme-dark">
+<header class="topbar">
+  <div class="top-left">
+    <a class="logo" href="#">
+      <img src="public/Logo-mini.png" alt="IDE Online Logo" class="brand-logo" />
+    </a>
+
+    <div class="lang-select" id="lang">
+      <button class="lang-trigger" type="button">
+        <img class="lang-icon" src="public/python.jpeg" alt="">
+        <span class="lang-text">Python</span>
+        <span class="lang-caret">▾</span>
+      </button>
+
+      <ul class="lang-popover" role="listbox">
+        <li class="lang-item is-active" data-lang="python">
+          <img src="public/python.jpeg" class="lang-icon" alt="">
+          <span>Python</span>
+        </li>
+        <li class="lang-item" data-lang="javascript">
+          <img src="public/js.png" class="lang-icon" alt="">
+          <span>JavaScript</span>
+        </li>
+        <li class="lang-item" data-lang="cpp">
+          <img src="public/cpp.png" class="lang-icon" alt="">
+          <span>C++</span>
+        </li>
+        <li class="lang-item" data-lang="java">
+          <img src="public/java.png" class="lang-icon" alt="">
+          <span>Java</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="top-center">
+    <button id="runBtn" class="btn-run-accent" title="Chạy mã nguồn">
+      <span class="btn-icon">▶</span> Chạy
+    </button>
+    <button class="icon-btn" title="Lưu dự án">💾</button>
+    <button class="icon-btn" title="Cài đặt">⚙</button>
+  </div>
+
+  <div class="top-right">
+    <label class="switch">
+      <input id="autoRunToggle" type="checkbox" />
+      <span class="slider"></span>
+      <span class="switch-label">Dark Mode</span>
+    </label>
+    <button class="btn-dark-pill">🔗 Chia sẻ</button>
+    <button id="signinBtn" class="btn-accent-pill">Đăng nhập</button>
+  </div>
+</header>
+
+
+    <main class="layout">
+        <!-- Editor -->
+        <section class="workbench">
+            <div class="file-tabbar">
+                <div class="file-tabs" id="fileTabs">
+
+                </div>
+                <button id="addFileBtn" class="btn btn-sm" title="Thêm tập tin mới">+</button>
+            </div>
+            <div id="editor" class="editor"></div>
+        </section>
+        <!-- Thanh kéo chia 2 pane -->
+        <div class="gutter" id="gutterX" aria-hidden="true"></div>
+
+        <!-- Preview -->
+        <section class="terminal-panel">
+            <div class="term-toolbar">
+                <div class="term-title">TERMINAL</div>
+                <div class="term-actions">
+                    <button id="shareBtn" class="icon-btn" title="Share">🔗</button>
+                </div>
+            </div>
+            <div id="terminal" class="terminal-body"></div>
+
+        </section>
+
+    </main>
+    <script src="src/main.js"></script>
+</body>
+
+</html>
