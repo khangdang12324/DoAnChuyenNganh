@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "live-server . --port=8080"
   },
   "keywords": [],
   "author": "",
@@ -15,5 +16,18 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "nanoid": "^5.1.6"
-  }
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1",
+    "live-server": "^1.2.2",
+    "nodemon": "^3.1.10"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/khangdang12324/DoAnChuyenNganh.git"
+  },
+  "bugs": {
+    "url": "https://github.com/khangdang12324/DoAnChuyenNganh/issues"
+  },
+  "homepage": "https://github.com/khangdang12324/DoAnChuyenNganh#readme"
 }

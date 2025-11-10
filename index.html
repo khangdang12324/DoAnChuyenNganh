@@ -9,14 +9,12 @@
     <link rel="stylesheet" href="assets/style.css" />
 
     <!--- ACE Editor --->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.3/ace.js"
-        integrity="sha512-E9c0L2j3f33xK4oQj5I5R4y0bKx9D7Hc2A9+Qh8wE8iQ9E6yFqHkz3TqiFjZc1R3F1y7v2j8KpR2vF7b1m3yiA=="
-        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.32.3/ext-language_tools.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ace.js" integrity="sha512-T2otaV2NuxAJAOCoj8ijyy+eAAadZlpvdLmakrIGVFbBkthgIFqLTXd+T8Z+S+kf4V7Ib5+6f6r4D4IdS9Ey4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <!--- JSZip --->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-</head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ext-language_tools.js" integrity="sha512-1/ljEXsccQB1r2ZcAGw0D6ZrslR2yog7wbFxgCMIW4kkdLRdK2BqzfVHjDmPFFJOqDiOuEN6GpxVijhYfWbtWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script></head>
+
+    <!--JSZip-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <body class="theme-dark">
 <header class="topbar">
@@ -54,10 +52,22 @@
   </div>
 
   <div class="top-center">
-    <button id="runBtn" class="btn-run-accent" title="Chạy mã nguồn">
+    <button type="button" id="runBtn" class="btn-run-accent" title="Chạy mã nguồn">
       <span class="btn-icon">▶</span> Chạy
     </button>
-    <button class="icon-btn" title="Lưu dự án">💾</button>
+    
+    <div class="save-menu-container">
+      <button id="saveBtnTrigger" class="icon-btn" title="Lưu dự án">💾</button>
+
+      <ul id="saveMenuPopover" class="save-popover hidden">
+        <li id="saveFileBtn">
+          <span>Tải file hiện tại</span>
+        </li>
+        <li id="saveZipBtn">
+          <span>Tải toàn bộ dự án(.zip)</span>
+      </ul>
+    </div>
+
     <button class="icon-btn" title="Cài đặt">⚙</button>
   </div>
 
@@ -65,7 +75,7 @@
     <label class="switch">
       <input id="autoRunToggle" type="checkbox" />
       <span class="slider"></span>
-      <span class="switch-label">Dark Mode</span>
+      <span class="switch-label">Tối/Sáng</span>
     </label>
     <button class="btn-dark-pill">🔗 Chia sẻ</button>
     <button id="signinBtn" class="btn-accent-pill">Đăng nhập</button>
