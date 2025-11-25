@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         terminalBody.innerHTML = '<span class="terminal-info">Đang Chạy...</span>\n';
 
-        const API_ENDPOINT = 'http://localhost:3000/run';
+        const API_ENDPOINT = 'https://doanchuyennganh-backend.onrender.com/run';
 
         try {
             const response = await fetch(API_ENDPOINT, {
