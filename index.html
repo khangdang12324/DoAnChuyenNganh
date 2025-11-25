@@ -68,7 +68,7 @@
       </ul>
     </div>
 
-    <button class="icon-btn" title="Cài đặt">⚙</button>
+    <!-- <button class="icon-btn" title="Cài đặt">⚙</button> -->
   </div>
 
   <div class="top-right">
@@ -78,21 +78,23 @@
       <span class="switch-label">Tối/Sáng</span>
     </label>
     <button class="btn-dark-pill">🔗 Chia sẻ</button>
-    <button id="signinBtn" class="btn-accent-pill">Đăng nhập</button>
+    <!-- <button id="signinBtn" class="btn-accent-pill">Đăng nhập</button> -->
   </div>
 </header>
 
 
     <main class="layout">
         <!-- Editor -->
-        <section class="workbench">
-            <div class="file-tabbar">
-                <div class="file-tabs" id="fileTabs">
+        <aside class="file-explorer">
+          <div class="file-explorer-header">
+            <span>TỆP TIN</span>
+            <button id="addFileBtn" class="icon-btn" title="Thêm tệp tin">＋</button>
+          </div>
+          <ul id="fileTree" class="file-tree-list"></ul>
+        </aside>
 
-                </div>
-                <button id="addFileBtn" class="btn btn-sm" title="Thêm tập tin mới">+</button>
-            </div>
-            <div id="editor" class="editor"></div>
+        <section class="workbench">
+          <div id="editor" class="editor"></div>
         </section>
         <!-- Thanh kéo chia 2 pane -->
         <div class="gutter" id="gutterX" aria-hidden="true"></div>

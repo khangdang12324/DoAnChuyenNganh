@@ -207,9 +207,9 @@ body {
 
 .layout {
     display: grid;
-    grid-template-columns: var(--left) 10px 1fr;
+   grid-template-columns: 250px 1fr 10px 1fr;
     grid-template-rows: 1fr;
-    grid-template-areas: "workbench gutter terminal";
+    grid-template-areas:"explorer workbench gutter terminal";
     gap: 0;
     height: calc(100vh - 48px);
     min-height: 0;
@@ -239,6 +239,7 @@ body {
 }
 
 .terminal-panel {
+    grid-area: terminal;
     background: #0f1115;
     color: #e5e7eb;
     display: flex;
@@ -720,44 +721,177 @@ body.theme-dark {
 .save-popover li:hover {
     background: #111827;
 }
-/* ======================================== */
-/* 7. MODAL LƯU (SAVE MODAL)
-/* ======================================== */
-.save-options-container {
+/* Dark Mode Styles */
+
+body.theme-light {
+    --accent-color: #007bff;
+    --accent-hover: #0069d9;
+    --accent-active: #005cbf;
+
+    --bg-topbar: #ffffff;
+    --fg-topbar: #212529;
+    --border-topbar: #e7e7e7;
+    
+    --btn-dark: #f8f9fa;
+    --btn-dark-border: #dee2e6;
+    --btn-dark-hover: #e2e6ea;
+
+    --dark-1: #f8f9fa; /* Nền tab file */
+    --dark-2: #e9ecef; /* Nền popover */
+    --dark-br: #dee2e6; /* Border */
+}
+
+/* Các thành phần cần đổi màu riêng */
+body.theme-light .workbench,
+body.theme-light .terminal-panel,
+body.theme-light .terminal-body,
+body.theme-light .editor {
+    background: #ffffff;
+    color: #212529;
+}
+
+body.theme-light .term-toolbar {
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+body.theme-light .gutter {
+    background: #e9ecef;
+    box-shadow: none;
+    border-left: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+}
+
+body.theme-light .file-tabbar {
+    background: #f8f9fa;
+    color: #212529;
+    border-bottom: 1px solid #dee2e6;
+}
+body.theme-light .file-tab {
+    background: #e9ecef;
+    border: 1px solid #dee2e6;
+    color: #495057;
+}
+body.theme-light .file-tab.active {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #fff;
+}
+
+body.theme-light .lang-popover {
+    background: #ffffff;
+    color: #212529;
+    border: 1px solid #dee2e6;
+}
+body.theme-light .lang-item:hover {
+    background: #f8f9fa;
+}
+
+body.theme-light .lang-trigger {
+    background: var(--dark-1);
+    color: var(--fg-topbar);
+    border: 1px solid var(--dark-br);
+}
+
+/* Modal (Popup) */
+body.theme-light .modal-content {
+    background: #ffffff;
+    color: #212529;
+    border: 1px solid #dee2e6;
+}
+body.theme-light .modal-content h3 {
+    border-bottom: 1px solid #e9ecef;
+}
+body.theme-light .modal-input {
+    background: #f8f9fa;
+    border: 1px solid #ced4da;
+    color: #212529;
+}
+body.theme-light .save-option-btn {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    color: #212529;
+}
+body.theme-light .save-option-btn:hover {
+    background: #e9ecef;
+    border-color: var(--accent-color);
+}
+body.theme-light .modal-btn-cancel {
+    background: #6c757d;
+    color: #fff;
+}
+body.theme-light .modal-btn-cancel:hover {
+    background: #5a6268;
+}
+
+/* 9. CÂY THƯ MỤC (FILE EXPLORER) */
+
+.file-explorer {
+    grid-area: explorer;
+    background-color: var(--dark-1,#1e1e1e);
+    border-right: 1px solid var(--dark-br,#374151);
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Khoảng cách giữa 2 nút */
-    margin-top: 25px;
+    min-height: 0;
+
 }
 
-/* Nút lựa chọn (to, bự) */
-.save-option-btn {
-    display: block;
+.file-explorer-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px 0 15px;
+    height: 40px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--fg-topbar,#e5e7eb);
+    border-bottom: 1px solid var(--dark-br,#374151);
+    flex-shrink: 0;
+}
+
+.file-explorer-header .icon-btn{
+    height: 28px;
+    width: 28px;
+    font-size: 20px;
+    background: transparent;
+    border: none;
+
+}
+
+.file-explorer-header .icon-btn:hover{
+    background: var(--dark-2,#2a2a2a);
+}
+
+.file-tree-list{
+    list-style: none;
+    padding: 8px;
+    margin: 0;
+    overflow: auto;
+    flex: 1;
+}
+
+.file-tree-list li{
+    margin-bottom: 4px;
+}
+
+.file-item{
+    display: flex;
+    align-items: center;
     width: 100%;
-    padding: 15px;
-    background: var(--dark-2, #1f2937);
-    border: 1px solid var(--dark-br, #374151);
-    border-radius: 8px;
-    text-align: left;
-    color: var(--fg-topbar, #e5e7eb);
+    padding: 6px 8px;
+    background: transparent;
+    border: none;
+    border-radius: 5px;
+    color: var(--fg-topbar,#e5e7eb);
     cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
+    text-align: left;
+    gap: 8px;
 }
-
-.save-option-btn:hover {
-    background: var(--dark-br, #374151);
-    border-color: var(--accent-color, #008c8c); /* Viền xanh khi hover */
+.file-item:hover{
+    background: var(--dark-2,#2a2a2a);
 }
-
-/* Chữ "Lưu file..." (in đậm) */
-.save-option-btn strong {
-    font-size: 16px;
-    display: block;
-    margin-bottom: 5px;
-}
-
-/* Chữ mô tả (nhỏ, mờ) */
-.save-option-btn span {
-    font-size: 14px;
-    opacity: 0.7;
+.file-item.active{
+    background: var(--accent-color,#008c8c);
+    font-weight: 600;
+    color: #fff;
 }

@@ -12,7 +12,11 @@ document.addEventListener('DOMContentLoaded', () => {
         enableSnippets: true,
         fontSize: "14px"
     });
+       
+    const fileSessions = {};
 
+    
+        // 
     const langSelectButton = document.querySelector('.lang-trigger');
     const langSelectMenu = document.querySelector('.lang-select');
     const langItems = langSelectMenu.querySelectorAll('.lang-item');
@@ -48,7 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
             langSelectMenu.classList.remove('is-open');
         }
     });
-
+    let vfs={
+        'main.py':{
+            type:'file',
+        }
+    };
     //run btn
 
     const runButton = document.getElementById("runBtn");
@@ -107,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         runCode();
     });
-    const fileSessions = {};
+   
     const fileTabsContainer = document.getElementById("fileTabs");
     const addFileButton = document.getElementById("addFileBtn");
 
@@ -295,4 +303,101 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // 6. CHỨC NĂNG TỐI/SÁNG (DARK MODE)
+
+    
+
+    const themeToggle = document.getElementById('autoRunToggle');
+    const body = document.body;
+
+
+    function applyTheme(theme) {
+        if (theme === 'light') {
+            body.classList.add('theme-light');
+            body.classList.remove('theme-dark');
+            editor.setTheme("ace/theme/github"); 
+        } else {
+            body.classList.add('theme-dark');
+            body.classList.remove('theme-light');
+            editor.setTheme("ace/theme/monokai"); 
+        }
+    }
+    
+  
+    if (themeToggle) {
+        themeToggle.addEventListener('change', () => {
+      
+            if (themeToggle.checked) {
+                applyTheme('light');
+               
+                localStorage.setItem('theme', 'light');
+            } else {
+                applyTheme('dark');
+           
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    }
+
+
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') {
+        themeToggle.checked = true; 
+        applyTheme('light');
+    } else {
+        themeToggle.checked = false; 
+        applyTheme('dark'); 
+    }
+
+
+ 
+    // 7. CHỨC NĂNG KÉO THẢ (RESIZABLE GUTTER)
+   
+
+    const gutter = document.getElementById('gutterX');
+    const layout = document.querySelector('.layout');
+
+    function handleMouseMove(e) {
+   
+        let newWorkbenchWidth = e.clientX - layout.getBoundingClientRect().left;
+        
+     
+        if (newWorkbenchWidth < 200) newWorkbenchWidth = 200; 
+        if (newWorkbenchWidth > window.innerWidth - 200) newWorkbenchWidth = window.innerWidth - 200; // Tối đa
+
+        const gutterWidth = gutter.offsetWidth;
+
+        layout.style.gridTemplateColumns = `${newWorkbenchWidth}px ${gutterWidth}px 1fr`;
+    }
+
+   
+    function handleMouseUp() {
+       
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+        
+
+        document.body.style.cursor = 'default';
+   
+        layout.style.pointerEvents = 'auto';
+    }
+
+ 
+    if (gutter) {
+        gutter.addEventListener('mousedown', (e) => {
+            e.preventDefault(); 
+
+           
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+            
+           
+            document.body.style.cursor = 'col-resize';
+           
+            layout.style.pointerEvents = 'none';
+        });
+    }
+
 });
