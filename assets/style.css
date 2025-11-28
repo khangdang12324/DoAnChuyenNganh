@@ -895,3 +895,396 @@ body.theme-light .modal-btn-cancel:hover {
     font-weight: 600;
     color: #fff;
 }
+/* Icon thư mục và tệp tin */
+
+.file-explorer-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 8px 0 15px;
+    height: 35px;
+    background: var(--dark-1);
+    font-size: 12px;
+    font-weight: bold;
+    color: #bbb;
+}
+
+.explorer-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.explorer-actions .icon-btn {
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    border-radius: 3px;
+    color: #bbb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+
+}
+
+.explorer-actions .icon -btn:hover {
+   background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Icon thư mục và tệp tin hien va an */
+
+.tree-item-folder > .nested {
+    display: none;
+   padding-left: 15px;
+   border-left: 1px solid #333;
+}
+
+.tree-item-folder.open > .nested {
+    display: block;
+}
+
+.tree-item-folder::after{
+  
+    float: right;
+    font-size: 10px;
+    transition: transform 0.2s;
+}
+
+.tree-item-folder.open > .tree-item-folder::after {
+    transform: rotate(90deg);
+}
+/* ======================================== */
+/* 10. INLINE INPUT (GIỐNG VS CODE)
+/* ======================================== */
+
+.tree-item-input {
+    width: calc(100% - 20px); /* Trừ lề */
+    background: #3c3c3c; /* Màu nền input giống VS Code */
+    color: #fff;
+    border: 1px solid var(--accent-color); /* Viền xanh khi gõ */
+    outline: none;
+    padding: 2px 5px;
+    margin-left: 22px; /* Thụt đầu dòng cho thẳng hàng với file */
+    font-size: 13px;
+    font-family: inherit;
+    border-radius: 2px;
+}
+
+/* --- ICON FILE ĐẸP (VS CODE STYLE) --- */
+.file-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    vertical-align: middle;
+    object-fit: contain; /* Để icon không bị méo */
+}
+
+/* Chỉnh lại ô nhập liệu Inline cho đẹp hơn */
+.tree-item-input {
+    background: #3c3c3c;
+    color: #fff;
+    border: 1px solid #007acc; /* Viền xanh chuẩn VS Code */
+    outline: none;
+    padding: 2px 4px;
+    font-size: 13px;
+    font-family: inherit;
+    width: calc(100% - 24px);
+    margin-left: 20px;
+}
+
+/* --- 10. Ô NHẬP LIỆU TRÊN CÂY (INLINE INPUT) --- */
+/* --- 10. Ô NHẬP LIỆU & ICON (FIXED) --- */
+
+/* Khung bao quanh Icon + Input */
+.tree-item-input-wrapper {
+    display: flex;          /* Xếp ngang hàng */
+    align-items: center;    /* Căn giữa dọc */
+    padding: 4px 10px;      /* Căn lề giống các file khác */
+    gap: 6px;               /* Khoảng cách giữa Icon và Input */
+}
+
+/* Icon trong lúc nhập */
+.tree-item-input-wrapper .file-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    flex-shrink: 0; /* Không bị bóp méo */
+}
+
+/* Ô nhập liệu */
+.tree-item-input {
+    flex: 1;                /* Chiếm hết khoảng trống còn lại */
+    background: #3c3c3c;    /* Nền tối */
+    color: #fff;
+    border: 1px solid #007acc; /* Viền xanh */
+    outline: none;
+    padding: 2px 4px;
+    font-size: 13px;
+    font-family: inherit;
+    border-radius: 2px;
+    min-width: 0; /* Tránh bị tràn */
+}
+
+.file-tree-list {
+    /* Code cũ... */
+    overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+    white-space: nowrap; /* Không xuống dòng */
+    text-overflow: ellipsis; /* Nếu dài quá thì hiện ... */
+}
+/* Icon mặc định (giấy trắng) */
+.file-icon.default-file {
+    filter: grayscale(100%) brightness(1.5); /* Làm cho nó trắng ra */
+    opacity: 0.7;
+}
+/* Modal Confirm Move */
+.confirm-modal-content {
+    background: #252526;
+    color: #ccc;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    border: 1px solid #454545;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.confirm-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 15px;
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+}
+.confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+.btn-primary {
+    background-color: #007acc;
+    color: white;
+}
+.btn-secondary {
+    background-color: #3c3c3c;
+    color: #ccc;
+}
+
+/* Context Menu */
+.context-menu {
+    position: absolute;
+    background: #252526;
+    border: 1px solid #454545;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+    border-radius: 5px;
+    padding: 5px 0;
+    list-style: none;
+    min-width: 150px;
+    z-index: 9999; /* Nằm trên cùng */
+}
+
+.context-menu.hidden {
+    display: none;
+}
+/* ======================================== */
+/* SIDEBAR (CÂY THƯ MỤC) - BẢN CHUẨN */
+/* ======================================== */
+
+.file-explorer {
+    grid-area: explorer;
+    background-color: var(--dark-1, #1e1e1e);
+    border-right: 1px solid var(--dark-br, #374151);
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    color: #cccccc;
+}
+
+/* --- HEADER --- */
+.file-explorer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    height: 35px;
+    background-color: #252526;
+    border-bottom: 1px solid #333;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #bbb;
+    flex-shrink: 0;
+}
+
+.explorer-actions {
+    display: flex;
+    gap: 2px;
+}
+
+.explorer-actions .icon-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    border: none;
+    background: transparent;
+    color: #bbb;
+    border-radius: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.explorer-actions .icon-btn:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+/* --- DANH SÁCH FILE --- */
+.file-tree-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+    flex: 1;
+}
+
+/* Folder & File Items */
+.tree-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 4px 10px;
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    text-align: left;
+    font-size: 13px;
+    cursor: pointer;
+    gap: 6px; /* Khoảng cách icon và chữ */
+    
+    /* Xử lý tên dài */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.tree-item:hover {
+    background-color: #2a2d2e;
+    color: #fff;
+}
+.tree-item.active {
+    background-color: #37373d;
+    color: #fff;
+    border-left: 2px solid var(--accent-color, #008c8c);
+}
+
+/* Icon File */
+.tree-item .file-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    flex-shrink: 0; /* Không bị méo */
+}
+
+/* Logic Đóng/Mở Folder */
+.tree-item-folder > .nested {
+    display: none;
+    padding-left: 15px;
+    border-left: 1px solid #333;
+    margin: 0;
+    list-style: none;
+}
+.tree-item-folder.open > .nested {
+    display: block;
+}
+.tree-item.folder::after {
+    content: '▸';
+    float: right;
+    font-size: 10px;
+    margin-left: auto;
+    transition: transform 0.1s;
+}
+.tree-item-folder.open > .tree-item.folder::after {
+    transform: rotate(90deg);
+}
+
+/* --- INPUT NHẬP LIỆU (INLINE) - ĐÃ SỬA --- */
+
+.tree-item-input-wrapper {
+    display: flex;
+    align-items: center;
+    padding: 4px 10px;
+    gap: 6px;
+}
+
+.tree-item-input-wrapper .file-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.tree-item-input {
+    flex: 1; /* Chiếm hết chỗ còn lại */
+    background: #3c3c3c;
+    color: #fff;
+    border: 1px solid #007acc;
+    outline: none;
+    padding: 2px 4px;
+    font-size: 13px;
+    font-family: inherit;
+    border-radius: 2px;
+    min-width: 0; /* Tránh tràn */
+}
+.context-menu li {
+    padding: 6px 15px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #cccccc;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.context-menu li:hover {
+    background-color: #094771; /* Màu xanh khi hover giống VS Code */
+    color: white;
+}
+
+.context-menu .separator {
+    height: 1px;
+    background: #454545;
+    margin: 4px 0;
+    padding: 0;
+}
+
+/* --- BREADCRUMBS (ĐƯỜNG DẪN FILE) --- */
+.breadcrumbs {
+    height: 22px;
+    background-color: #1e1e1e; /* Trùng màu nền editor */
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 13px;
+    color: #969696;
+    border-bottom: 1px solid #2b2b2b; /* Đường kẻ mờ ngăn cách với code */
+}
+
+.breadcrumb-item {
+    cursor: pointer;
+}
+
+.breadcrumb-item:hover {
+    color: #e0e0e0;
+}
+
+.breadcrumb-item.active {
+    color: #e0e0e0; /* File đang mở sáng hơn */
+}
+
+.breadcrumb-separator {
+    margin: 0 6px;
+    font-size: 14px;
+}

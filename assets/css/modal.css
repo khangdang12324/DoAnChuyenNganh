@@ -1,0 +1,56 @@
+/* ======================================== */
+/* MODAL & POPUP (ĐÃ SỬA CĂN GIỮA & TỐC ĐỘ) */
+/* ======================================== */
+
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0; /* Phủ kín màn hình */
+    background: rgba(0, 0, 0, 0.6); /* Nền tối mờ */
+    z-index: 2000;
+    
+    /* CĂN GIỮA TUYỆT ĐỐI */
+    display: flex;
+    align-items: center;     /* Căn giữa dọc */
+    justify-content: center; /* Căn giữa ngang (Sửa lỗi lệch trái) */
+    
+
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-overlay.hidden {
+    display: none !important; 
+    opacity: 0;
+    pointer-events: none;
+    transition: none !important;
+}
+
+.confirm-modal-content {
+    background: #252526;
+    color: #e5e7eb;
+    padding: 20px 25px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 90%; /* Để không bị tràn trên mobile */
+    border: 1px solid #454545;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    
+    /* Reset margin để đảm bảo căn giữa */
+    margin: 0; 
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 25px;
+}
+
+.btn-primary { background-color: #007acc; color: white; border: none; }
+.btn-primary:hover { background-color: #0062a3; }
+
+.btn-danger { background-color: #d93025; color: white; border: none; } /* Nút xóa màu đỏ */
+.btn-danger:hover { background-color: #b02015; }
+
+.btn-secondary { background-color: #3c3c3c; color: #ccc; border: 1px solid #555; }
+.btn-secondary:hover { background-color: #444; }

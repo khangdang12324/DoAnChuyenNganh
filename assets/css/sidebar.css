@@ -1,0 +1,160 @@
+/* ======================================== */
+/* SIDEBAR (CÂY THƯ MỤC) - DARK MODE CHUẨN */
+/* ======================================== */
+
+.file-explorer {
+    grid-area: explorer;
+    background-color: #1e1e1e; /* Nền tối chuẩn VS Code */
+    border-right: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    color: #cccccc; /* Chữ xám nhạt */
+}
+
+/* Header (Chứa chữ TỆP TIN và các nút) */
+.file-explorer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    height: 35px;
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: #bbb;
+    background-color: #252526; /* Header tối hơn tí */
+    flex-shrink: 0;
+}
+
+/* Các nút icon (+, refresh...) */
+.explorer-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.explorer-actions .icon-btn {
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    border-radius: 3px;
+    color: #bbb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+}
+.explorer-actions .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* Danh sách file (UL) */
+.file-tree-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex: 1;
+}
+
+/* Folder (Thư mục) */
+.tree-item-folder {
+    cursor: pointer;
+}
+/* Nút bấm thư mục */
+.tree-item.folder {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 4px 20px; /* Thụt lề chút */
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    text-align: left;
+    font-size: 13px;
+    cursor: pointer;
+}
+.tree-item.folder::before {
+    content: '▸'; /* Mũi tên đóng */
+    display: inline-block;
+    width: 15px;
+    font-size: 10px;
+    transition: transform 0.1s;
+}
+/* Khi mở folder */
+.tree-item-folder.open > .tree-item.folder::before {
+    transform: rotate(90deg); /* Xoay mũi tên xuống */
+}
+
+/* Danh sách con (Nested) */
+.nested {
+    display: none; /* Mặc định ẩn */
+    list-style: none;
+    padding-left: 10px; /* Thụt lề con */
+    margin: 0;
+}
+.tree-item-folder.open > .nested {
+    display: block; /* Hiện khi mở */
+}
+
+/* File (Tệp tin) */
+.tree-item-file {
+    display: block;
+}
+.tree-item.file {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 4px 20px 4px 35px; /* Thụt lề sâu hơn folder */
+    background: transparent;
+    border: none;
+    color: #cccccc;
+    text-align: left;
+    font-size: 13px;
+    cursor: pointer;
+}
+.tree-item.file:hover {
+    background-color: #2a2d2e; /* Hover màu xám nhẹ */
+    color: #fff;
+}
+.tree-item.file.active {
+    background-color: #37373d; /* Active màu xám đậm */
+    color: #fff;
+    border-left: 2px solid #007acc; /* Viền xanh bên trái */
+}
+
+/* Input nhập tên file (Inline) */
+.tree-item-input {
+    width: calc(100% - 10px);
+    background: #3c3c3c;
+    color: #fff;
+    border: 1px solid #007acc;
+    outline: none;
+    padding: 2px 5px;
+    margin: 2px 5px;
+    font-size: 13px;
+}
+/* --- ICON FILE ĐẸP (VS CODE STYLE) --- */
+.file-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    vertical-align: middle;
+    object-fit: contain; /* Để icon không bị méo */
+}
+
+/* Chỉnh lại ô nhập liệu Inline cho đẹp hơn */
+.tree-item-input {
+    background: #3c3c3c;
+    color: #fff;
+    border: 1px solid #007acc; /* Viền xanh chuẩn VS Code */
+    outline: none;
+    padding: 2px 4px;
+    font-size: 13px;
+    font-family: inherit;
+    width: calc(100% - 24px);
+    margin-left: 20px;
+}

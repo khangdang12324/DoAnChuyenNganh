@@ -2,117 +2,178 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>IDE Online</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IDE Online</title>
 
-    <link rel="stylesheet" href="assets/style.css" />
 
-    <!--- ACE Editor --->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ace.js" integrity="sha512-T2otaV2NuxAJAOCoj8ijyy+eAAadZlpvdLmakrIGVFbBkthgIFqLTXd+T8Z+S+kf4V7Ib5+6f6r4D4IdS9Ey4A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="assets/css/base.css" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ext-language_tools.js" integrity="sha512-1/ljEXsccQB1r2ZcAGw0D6ZrslR2yog7wbFxgCMIW4kkdLRdK2BqzfVHjDmPFFJOqDiOuEN6GpxVijhYfWbtWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script></head>
+  <link rel="stylesheet" href="assets/css/layout.css" />
 
-    <!--JSZip-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="assets/css/components.css" />
+
+  <link rel="stylesheet" href="assets/css/sidebar.css" />
+  <link rel="stylesheet" href="assets/css/editor.css" />
+  <link rel="stylesheet" href="assets/css/terminal.css" />
+  <link rel="stylesheet" href="assets/css/modal.css" />
+
+  <link rel="stylesheet" href="assets/css/theme.css" />
+  <link rel="stylesheet" href="assets/style.css" />
+  <!--- ACE Editor --->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ace.js"
+    integrity="sha512-T2otaV2NuxAJAOCoj8ijyy+eAAadZlpvdLmakrIGVFbBkthgIFqLTXd+T8Z+S+kf4V7Ib5+6f6r4D4IdS9Ey4A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ext-language_tools.js"
+    integrity="sha512-1/ljEXsccQB1r2ZcAGw0D6ZrslR2yog7wbFxgCMIW4kkdLRdK2BqzfVHjDmPFFJOqDiOuEN6GpxVijhYfWbtWg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<!--JSZip-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
+  integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
+  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <body class="theme-dark">
-<header class="topbar">
-  <div class="top-left">
-    <a class="logo" href="#">
-      <img src="Logo-mini.png" alt="IDE Online Logo" class="brand-logo" />
-    </a>
-
-    <div class="lang-select" id="lang">
-      <button class="lang-trigger" type="button">
-        <img class="lang-icon" src="python.jpeg" alt="">
-        <span class="lang-text">Python</span>
-        <span class="lang-caret">▾</span>
-      </button>
+  <header class="topbar">
+    <div class="top-left">
+      
+      <a class="logo" href="#">
+        <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081010/Logo-mini_p1obee.png"
+          alt="IDE Online Logo" class="brand-logo" />
+      </a>
 
       <ul class="lang-popover" role="listbox">
         <li class="lang-item is-active" data-lang="python">
-          <img src="python.jpeg" class="lang-icon" alt="">
+          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764080590/python.jpg" class="lang-icon" alt="">
           <span>Python</span>
         </li>
         <li class="lang-item" data-lang="javascript">
-          <img src="js.png" class="lang-icon" alt="">
+          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081008/js_sxfpwa.png" class="lang-icon"
+            alt="">
           <span>JavaScript</span>
         </li>
         <li class="lang-item" data-lang="cpp">
-          <img src="cpp.png" class="lang-icon" alt="">
+          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081009/cpp_ud97qo.png" class="lang-icon"
+            alt="">
           <span>C++</span>
         </li>
         <li class="lang-item" data-lang="java">
-          <img src="java.png" class="lang-icon" alt="">
+          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081009/java_jjd57n.png" class="lang-icon"
+            alt="">
           <span>Java</span>
         </li>
       </ul>
     </div>
-  </div>
-
-  <div class="top-center">
-    <button type="button" id="runBtn" class="btn-run-accent" title="Chạy mã nguồn">
-      <span class="btn-icon">▶</span> Chạy i
-    </button>
-    
-    <div class="save-menu-container">
-      <button id="saveBtnTrigger" class="icon-btn" title="Lưu dự án">💾</button>
-
-      <ul id="saveMenuPopover" class="save-popover hidden">
-        <li id="saveFileBtn">
-          <span>Tải file hiện tại</span>
-        </li>
-        <li id="saveZipBtn">
-          <span>Tải toàn bộ dự án(.zip)</span>
-      </ul>
     </div>
 
-    <!-- <button class="icon-btn" title="Cài đặt">⚙</button> -->
-  </div>
+    <div class="top-center">
+      <button type="button" id="runBtn" class="btn-run-accent" title="Chạy mã nguồn">
+        <span class="btn-icon">▶</span> Chạy
+      </button>
 
-  <div class="top-right">
-    <label class="switch">
-      <input id="autoRunToggle" type="checkbox" />
-      <span class="slider"></span>
-      <span class="switch-label">Tối/Sáng</span>
-    </label>
-    <button class="btn-dark-pill">🔗 Chia sẻ</button>
-    <!-- <button id="signinBtn" class="btn-accent-pill">Đăng nhập</button> -->
-  </div>
-</header>
+      <div class="save-menu-container">
+        <button id="saveBtnTrigger" class="icon-btn" title="Lưu dự án">💾</button>
+
+        <ul id="saveMenuPopover" class="save-popover hidden">
+          <li id="saveFileBtn">
+            <span>Tải file hiện tại</span>
+          </li>
+          <li id="saveZipBtn">
+            <span>Tải toàn bộ dự án(.zip)</span>
+        </ul>
+      </div>
+
+      <!-- <button class="icon-btn" title="Cài đặt">⚙</button> -->
+    </div>
+
+    <div class="top-right">
+      <label class="switch">
+        <input id="autoRunToggle" type="checkbox" />
+        <span class="slider"></span>
+        <span class="switch-label">Tối/Sáng</span>
+      </label>
+      <button class="btn-dark-pill">🔗 Chia sẻ</button>
+      <!-- <button id="signinBtn" class="btn-accent-pill">Đăng nhập</button> -->
+    </div>
+
+  </header>
 
 
-    <main class="layout">
-        <!-- Editor -->
-        <aside class="file-explorer">
-          <div class="file-explorer-header">
-            <span>TỆP TIN</span>
-            <button id="addFileBtn" class="icon-btn" title="Thêm tệp tin">＋</button>
-          </div>
-          <ul id="fileTree" class="file-tree-list"></ul>
-        </aside>
+  <main class="layout">
+    
+    <!-- Editor -->
+    <aside class="file-explorer">
+      
+      <div class="file-explorer-header">
+        <span>TỆP TIN</span>
+        <div class="explorer-actions">
+          <button id="newFileBtn" class="icon-btn" title="Thêm tệp tin">📄</button>
+          <button id="newFolderBtn" class="icon-btn" title="Thêm thư mục">📁</button>
+          <button id="refreshBtn" class="icon-btn" title="Làm mới">🔄</button>
+          <button id="collapseBtn" class="icon-btn" title="Thu gọn tất cả">-</button>
+        </div>
+      </div>
+      <ul id="fileTree" class="file-tree-list"></ul>
+    </aside>
 
-        <section class="workbench">
-          <div id="editor" class="editor"></div>
-        </section>
-        <!-- Thanh kéo chia 2 pane -->
-        <div class="gutter" id="gutterX" aria-hidden="true"></div>
+    <section class="workbench">
+      <div class="breadcrumbs" id="breadcrumbs">
+        <span class="breadcrumb-item">k-ide</span>
+        <span class="breadcrumb-separator">›</span>
+        <span class="breadcrumb-item active" id="breadcrumbFile">main.py</span>
+      </div>
 
-        <!-- Preview -->
-        <section class="terminal-panel">
-            <div class="term-toolbar">
-                <div class="term-title">TERMINAL</div>
-                <div class="term-actions">
-                    <button id="shareBtn" class="icon-btn" title="Share">🔗</button>
-                </div>
-            </div>
-            <div id="terminal" class="terminal-body"></div>
+      <div id="editor" class="editor"></div>
+    </section>
+    <!-- Thanh kéo chia 2 pane -->
+    <div class="gutter" id="gutterX" aria-hidden="true"></div>
 
-        </section>
+    <!-- Preview -->
+    <section class="terminal-panel">
+      <div class="term-toolbar">
+        <div class="term-title">TERMINAL</div>
+        <div class="term-actions">
+          <button id="shareBtn" class="icon-btn" title="Share">🔗</button>
+        </div>
+      </div>
+      <div id="terminal" class="terminal-body"></div>
 
-    </main>
-    <script src="src/main.js"></script>
+    </section>
+    <ul id="contextMenu" class="context-menu hidden">
+      <li id="ctxRename">✏️ Đổi tên</li>
+      <li id="ctxDelete" style="color: #ff6b6b;">🗑️ Xóa</li>
+      <li class="separator"></li>
+      <li id="ctxDownload">⬇️ Tải về</li>
+    </ul>
+
+    <div id="deleteConfirmModal" class="modal-overlay hidden">
+      <div class="confirm-modal-content" style="border: 1px solid #ff6b6b;">
+        <h3 style="margin-top: 0; font-size: 16px; color: #ff6b6b;">Xác nhận xóa</h3>
+        <p id="deleteConfirmText" style="font-size: 14px; margin: 15px 0;">Bạn có chắc muốn xóa file này?</p>
+
+        <div class="confirm-actions">
+          <button id="btnCancelDelete" class="btn btn-secondary">Hủy</button>
+          <button id="btnConfirmDelete" class="btn btn-primary" style="background-color: #ff6b6b;">Xóa vĩnh
+            viễn</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="status-bar">
+    <div class="status-left">
+      <!-- <span class="status-item"><i class="icon">code-branch</i> main*</span> -->
+      <span class="status-item" id="statusIssues">0 errors</span>
+    </div>
+    <div class="status-right">
+      <span class="status-item" id="statusCursor">Ln 1, Col 1</span>
+      <span class="status-item">UTF-8</span>
+      <span class="status-item" id="statusLang">Python</span>
+      <!-- <span class="status-item"><i class="icon">bell</i></span> -->
+    </div>
+  </footer>
+  <script type="module" src="src/main.js"></script>
 </body>
 
 </html>
