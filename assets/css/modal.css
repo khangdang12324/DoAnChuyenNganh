@@ -1,56 +1,203 @@
 /* ======================================== */
-/* MODAL & POPUP (ĐÃ SỬA CĂN GIỮA & TỐC ĐỘ) */
+/* MODAL & POPUP (GIAO DIỆN VS CODE STYLE) */
 /* ======================================== */
 
+/* 1. Lớp phủ mờ nền (Overlay) */
 .modal-overlay {
     position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0; /* Phủ kín màn hình */
-    background: rgba(0, 0, 0, 0.6); /* Nền tối mờ */
-    z-index: 2000;
-    
-    /* CĂN GIỮA TUYỆT ĐỐI */
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75); /* Tối hơn cho ngầu */
+    z-index: 9999;
     display: flex;
-    align-items: center;     /* Căn giữa dọc */
-    justify-content: center; /* Căn giữa ngang (Sửa lỗi lệch trái) */
+    align-items: center;
+    justify-content: center;
     
-
+    /* Hiệu ứng mờ ảo khi hiện ra */
+    backdrop-filter: blur(3px); 
     opacity: 1;
-    pointer-events: auto;
+    transition: opacity 0.2s ease;
 }
 
 .modal-overlay.hidden {
-    display: none !important; 
+    display: none !important;
     opacity: 0;
     pointer-events: none;
-    transition: none !important;
 }
 
-.confirm-modal-content {
-    background: #252526;
-    color: #e5e7eb;
-    padding: 20px 25px;
-    border-radius: 8px;
-    width: 400px;
-    max-width: 90%; /* Để không bị tràn trên mobile */
-    border: 1px solid #454545;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    
-    /* Reset margin để đảm bảo căn giữa */
-    margin: 0; 
+/* 2. Cái Hộp Modal Chính */
+.modal-content {
+    background-color: #252526; /* Màu nền chuẩn VS Code */
+    color: #cccccc;
+    width: 380px; /* Rộng hơn chút */
+    max-width: 90%;
+    padding: 25px;
+    border-radius: 8px; /* Bo góc mềm mại */
+    border: 1px solid #454545; /* Viền mỏng tinh tế */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); /* Đổ bóng sâu */
+    position: relative;
+    transform: translateY(0);
+    transition: transform 0.2s ease;
 }
 
-.confirm-actions {
+/* Tiêu đề (Đăng nhập...) */
+.modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    text-align: center; /* Căn giữa tiêu đề */
+    letter-spacing: 0.5px;
+}
+
+/* 3. Ô nhập liệu (Form Group) */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #9aa0a6;
+    margin-bottom: 6px;
+    text-transform: uppercase; /* Chữ in hoa nhỏ cho chuyên nghiệp */
+}
+
+/* Input xịn xò */
+.modal-input {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: #3c3c3c; /* Nền input tối */
+    border: 1px solid transparent; /* Viền ẩn */
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: all 0.2s;
+}
+
+/* Khi bấm vào Input */
+.modal-input:focus {
+    outline: none;
+    border-color: #007acc; /* Viền xanh VS Code */
+    background-color: #444444;
+}
+
+/* Input cho số (Cài đặt) */
+input[type="number"] {
+    font-family: Consolas, monospace;
+}
+
+/* Select Box (Dropdown) */
+select.modal-input {
+    cursor: pointer;
+}
+
+/* --- 4. NÚT BẤM (ACTIONS) - ĐÃ SỬA ĐẸP --- */
+
+.modal-actions {
     display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+    justify-content: space-between; /* Đẩy link sang trái, các nút sang phải */
+    align-items: center;
     margin-top: 25px;
+    width: 100%;
 }
 
-.btn-primary { background-color: #007acc; color: white; border: none; }
-.btn-primary:hover { background-color: #0062a3; }
+/* Nhóm các nút (Hủy + Đăng nhập) */
+.modal-actions div {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa 2 nút */
+}
 
-.btn-danger { background-color: #d93025; color: white; border: none; } /* Nút xóa màu đỏ */
-.btn-danger:hover { background-color: #b02015; }
+/* Nút bấm nhỏ gọn */
+.btn {
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    white-space: nowrap; /* Không xuống dòng */
+    min-width: 80px; /* Độ rộng tối thiểu cho đẹp */
+    text-align: center;
+}
 
-.btn-secondary { background-color: #3c3c3c; color: #ccc; border: 1px solid #555; }
-.btn-secondary:hover { background-color: #444; }
+/* Nút Hủy */
+.modal-btn-cancel {
+    background-color: transparent;
+    border: 1px solid #555;
+    color: #ccc;
+}
+.modal-btn-cancel:hover {
+    background-color: #3c3c3c;
+    color: #fff;
+}
+
+/* Nút Chính (Login/Register) */
+.modal-btn-create {
+    background-color: #007acc;
+    color: #fff;
+}
+.modal-btn-create:hover {
+    background-color: #0062a3;
+}
+.modal-btn-create:disabled {
+    background-color: #555;
+    cursor: not-allowed;
+}
+
+/* Nút Hủy (Màu xám) */
+.modal-btn-cancel {
+    background-color: transparent;
+    color: #cccccc;
+    border: 1px solid #555;
+}
+
+.modal-btn-cancel:hover {
+    background-color: #3c3c3c;
+    color: #ffffff;
+    border-color: #777;
+}
+
+/* Nút Chính (Đăng nhập/Tạo/Lưu) - Màu Xanh */
+.modal-btn-create {
+    background-color: #007acc;
+    color: #ffffff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.modal-btn-create:hover {
+    background-color: #0062a3; /* Xanh đậm hơn khi hover */
+    transform: translateY(-1px); /* Nổi lên nhẹ */
+}
+
+/* Nút Đỏ (Xóa) */
+.btn-primary[style*="ff6b6b"] {
+    background-color: #d93025 !important;
+}
+.btn-primary[style*="ff6b6b"]:hover {
+    background-color: #b02015 !important;
+}
+
+/* Link "Chưa có tài khoản?" */
+#switchAuthMode {
+    font-size: 12px;
+    color: #3794ff;
+    text-decoration: none;
+    margin-right: auto; /* Đẩy nó sang trái cùng */
+}
+#switchAuthMode:hover {
+    text-decoration: underline;
+}
+
+/* Thông báo lỗi */
+#authError {
+    background: rgba(255, 107, 107, 0.1);
+    color: #ff6b6b;
+    padding: 8px;
+    border-radius: 4px;
+    border-left: 3px solid #ff6b6b;
+    margin-top: 10px;
+}

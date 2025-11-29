@@ -158,3 +158,13 @@
     width: calc(100% - 24px);
     margin-left: 20px;
 }
+.layout {
+    display: grid;
+    /* CỘT MỚI: [IconBar] [Explorer] [Editor] [Gutter] [Terminal] */
+    grid-template-columns: 50px 220px 1fr 10px 1fr; 
+    grid-template-rows: 1fr;
+    grid-template-areas: "activity explorer workbench gutter terminal"; /* Đổi tên area */
+    gap: 0;
+    height: calc(100vh - 48px - 22px); /* Trừ topbar & statusbar */
+    min-height: 0;
+}

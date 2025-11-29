@@ -6,33 +6,65 @@
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
     gap: 12px;
-    padding: 0 16px;
+    padding: 0 16px 0 0;
     border-bottom: 1px solid var(--border-topbar);
     box-shadow: 0 1px 0 var(--border-topbar);
 }
 
-.top-left { display: flex; align-items: center; gap: 10px; }
-.top-right { display: flex; align-items: center; gap: 10px; justify-self: end; }
-.top-center { display: flex; justify-content: center; align-items: center; gap: 8px; justify-self: center; }
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 0;
+    padding-left: 2px;
+}
+
+.top-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-self: end;
+}
+
+.top-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    justify-self: center;
+}
 
 /* Brand Logo */
-.brand { display: flex; align-items: center; gap: 8px; }
-.brand-logo { height: 32px; width: auto; object-fit: contain; display: block; }
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.brand-logo {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+}
 
 /* Main Layout Grid */
 .layout {
     display: grid;
-    grid-template-columns: 250px 1fr 10px 1fr;
+    grid-template-columns: 50px 220px 1fr 10px 1fr;
     grid-template-rows: 1fr;
-    grid-template-areas: "explorer workbench gutter terminal";
+    grid-template-areas: "activity explorer workbench gutter terminal";
     gap: 0;
-    height: calc(100vh - 48px);
+    height: calc(100vh - 48px - 22px);
     min-height: 0;
+    
 }
+
 /* STATUS BAR */
 .status-bar {
     height: 22px;
-    background-color: #008c8c; /* Màu xanh đặc trưng VS Code */
+    background-color: #008c8c;
+    /* Màu xanh đặc trưng VS Code */
     color: #fff;
     display: flex;
     justify-content: space-between;
@@ -44,11 +76,13 @@
 }
 
 body.theme-light .status-bar {
-    background-color: #008c8c; /* Light mode vẫn dùng xanh hoặc tím */
+    background-color: #008c8c;
+    /* Light mode vẫn dùng xanh hoặc tím */
     color: #fff;
 }
 
-.status-left, .status-right {
+.status-left,
+.status-right {
     display: flex;
     gap: 15px;
 }
@@ -64,8 +98,43 @@ body.theme-light .status-bar {
     opacity: 0.8;
 }
 
-/* Điều chỉnh lại chiều cao Layout để chừa chỗ cho Status Bar */
-.layout {
-    /* Trừ đi 48px (topbar) và 22px (statusbar) */
-    height: calc(100vh - 48px - 22px); 
+/* --- ACTIVITY BAR (THANH ICON DỌC) --- */
+.activity-bar {
+    grid-area: activity;
+    background-color: #1e1e1e;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-right: 1px solid #252526;
+}
+
+/* Từng ô icon */
+.activity-item {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer; /* 1. Con trỏ bàn tay */
+    color: #858585;  /* Màu xám mặc định */
+    position: relative;
+    transition: color 0.2s; /* Hiệu ứng mượt */
+}
+
+/* Khi di chuột vào (Hover) */
+.activity-item:hover {
+    color: #fff; /* 2. Sáng lên màu trắng */
+}
+
+/* Khi đang chọn (Active) */
+.activity-item.active {
+    color: #fff;
+    border-left: 2px solid var(--accent-color); /* 3. Viền sáng bên trái */
+}
+
+.activity-item svg {
+    width: 24px;
+    height: 24px;
 }

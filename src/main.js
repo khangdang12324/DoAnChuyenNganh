@@ -109,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
     editor.setTheme("ace/theme/monokai");
     editor.session.setMode("ace/mode/python");
     editor.setFontSize("14px");
-   editor.setOptions({
+    editor.setOptions({
         enableBasicAutocompletion: true,
         enableLiveAutocompletion: true,
         enableSnippets: true,
@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ext === 'java') langText = 'Java';
             if (ext === 'html') langText = 'HTML';
             if (ext === 'css') langText = 'CSS';
-            
+
             statusLang.textContent = langText;
         }
 
@@ -292,7 +292,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Ví dụ: src/main.py -> src › main.py
             const displayPath = path.replace(/\//g, ' › ');
             breadcrumbFile.textContent = displayPath;
-            
+
             // Cập nhật icon tương ứng bên cạnh (nếu muốn xịn hơn)
             // breadcrumbFile.innerHTML = `<img src="${getFileIcon(path)}" width="14" style="vertical-align:middle; margin-right:5px"> ${displayPath}`;
         }
@@ -365,6 +365,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (ext === 'js') lang = 'javascript';
 
             terminalBody.innerHTML = '<span class="terminal-info">Đang Chạy...</span>\n';
+            // LINK RENDER CỦA BẠN (Nhớ thêm /run ở cuối)
             const API_ENDPOINT = 'https://doanchuyennganh-backend.onrender.com/run';
 
             try {
@@ -423,7 +424,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     // --- LOGIC XỬ LÝ TRONG MODAL XÓA ---
-   // --- SỬA LOGIC NÚT XÓA (Cập nhật ngay lập tức) ---
+    // --- SỬA LOGIC NÚT XÓA (Cập nhật ngay lập tức) ---
     if (btnConfirmDelete) {
         btnConfirmDelete.addEventListener('click', () => {
             // 1. Đóng Modal NGAY LẬP TỨC
@@ -439,16 +440,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Nếu đang mở file đó thì xóa editor
                     if (activePath === contextMenuTarget) {
                         activePath = null;
-                        editor.setValue(""); 
+                        editor.setValue("");
                     }
-                    
+
                     // 3. QUAN TRỌNG: VẼ LẠI CÂY NGAY LẬP TỨC
                     // (Lỗi của bạn là thiếu hoặc gọi sai tên hàm này)
                     if (typeof renderFileTreeWrapper === 'function') {
                         renderFileTreeWrapper();
                     } else {
                         // Dự phòng nếu bạn đặt tên hàm khác
-                        renderFileTree(); 
+                        renderFileTree();
                     }
                 }
             }
@@ -528,12 +529,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         // (Tạm thời set null hoặc update thủ công)
                         // Cách tốt nhất:
                     }
-                    if(typeof renderFileTreeWrapper === 'function') {
+                    if (typeof renderFileTreeWrapper === 'function') {
                         renderFileTreeWrapper();
                     } else {
-                        renderFileTree(); 
+                        renderFileTree();
                     }
-                  
+
                 }
             };
 
@@ -592,28 +593,202 @@ document.addEventListener('DOMContentLoaded', () => {
         statusCursor.textContent = `Ln ${pos.row + 1}, Col ${pos.column + 1}`;
     });
 
-    // --- TOGGLE SIDEBAR (Ctrl+B) ---
-    const sidebar = document.querySelector('.file-explorer');
-    const layout = document.querySelector('.layout'); // Để chỉnh lại Grid
+    // --- LOGIC ĐÓNG/MỞ SIDEBAR (TOGGLE) ---
 
+    // 1. Tìm các nút kích hoạt
+    const actExplorer = document.getElementById('actExplorer'); // Icon File trên thanh dọc
+    const sidebar = document.querySelector('.file-explorer'); // Cây thư mục
+    const layout = document.querySelector('.layout'); // Layout chính
+
+    // Hàm Toggle Sidebar
     function toggleSidebar() {
-        if (sidebar.style.display === 'none') {
+        if (!sidebar) return;
+
+        // Kiểm tra xem sidebar đang hiện hay ẩn
+        const isHidden = sidebar.style.display === 'none';
+
+        if (isHidden) {
+            // HIỆN SIDEBAR
             sidebar.style.display = 'flex';
-            // Khôi phục layout 4 cột
-            // (Lấy giá trị cũ hoặc set mặc định)
-            layout.style.gridTemplateColumns = "250px 1fr 10px 1fr";
+            // Khôi phục layout 5 cột
+            layout.style.gridTemplateColumns = "50px 220px 1fr 10px 1fr";
+
+            // Tô sáng icon
+            if (actExplorer) actExplorer.classList.add('active');
         } else {
+            // ẨN SIDEBAR
             sidebar.style.display = 'none';
-            // Ẩn cột đầu tiên đi
-            layout.style.gridTemplateColumns = "0px 1fr 10px 1fr";
+            // Layout co lại (Cột thứ 2 về 0px)
+            layout.style.gridTemplateColumns = "50px 0px 1fr 10px 1fr";
+
+            // Tắt sáng icon
+            if (actExplorer) actExplorer.classList.remove('active');
         }
     }
 
-    // Phím tắt Ctrl+B
+    // 2. Gắn sự kiện Click cho Icon Explorer
+    if (actExplorer) {
+        actExplorer.addEventListener('click', (e) => {
+            e.stopPropagation(); // Ngăn sự kiện lan ra ngoài
+            toggleSidebar();
+        });
+    }
+
+    // 3. Gắn sự kiện Phím tắt (Ctrl + B) giống VS Code
     document.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') {
             e.preventDefault();
             toggleSidebar();
         }
     });
+
+    // =========================================================
+    // 10. LOGIC ĐĂNG NHẬP / ĐĂNG KÝ (AUTH)
+    // =========================================================
+
+    const authModal = document.getElementById('authModal');
+    const signinBtn = document.getElementById('signinBtn'); // Nút trên Header
+    const logoutBtn = document.getElementById('logoutBtn'); // Nút Đăng xuất
+    const userDisplay = document.getElementById('userDisplay'); // Hiển thị tên User
+
+    const authTitle = document.getElementById('authTitle');
+    const authUsernameInput = document.getElementById('authUsername');
+    const authPasswordInput = document.getElementById('authPassword');
+    const authError = document.getElementById('authError');
+    const switchAuthMode = document.getElementById('switchAuthMode');
+    const authSubmitBtn = document.getElementById('authSubmitBtn');
+    const authCancelBtn = document.getElementById('authCancelBtn');
+
+    let isLoginMode = true; // Trạng thái: Đang ở màn hình Login hay Register
+
+    // --- HÀM CẬP NHẬT GIAO DIỆN THEO TRẠNG THÁI ---
+    function updateAuthUI() {
+        const token = localStorage.getItem('token');
+        const username = localStorage.getItem('username');
+
+        if (token && username) {
+            // Đã đăng nhập
+            signinBtn.style.display = 'none';
+            userDisplay.textContent = `Hi, ${username}`;
+            userDisplay.style.display = 'inline-block';
+            logoutBtn.style.display = 'inline-block';
+        } else {
+            // Chưa đăng nhập
+            signinBtn.style.display = 'inline-block';
+            userDisplay.style.display = 'none';
+            logoutBtn.style.display = 'none';
+        }
+    }
+
+    // --- MỞ MODAL ---
+    if (signinBtn) {
+        signinBtn.addEventListener('click', () => {
+            authModal.classList.remove('hidden');
+            // Reset form
+            isLoginMode = true;
+            authTitle.textContent = "Đăng nhập";
+            authSubmitBtn.textContent = "Đăng nhập";
+            switchAuthMode.textContent = "Chưa có tài khoản? Đăng ký ngay";
+            authError.style.display = 'none';
+            authUsernameInput.value = '';
+            authPasswordInput.value = '';
+            authUsernameInput.focus();
+        });
+    }
+
+    // --- ĐÓNG MODAL ---
+    if (authCancelBtn) authCancelBtn.addEventListener('click', () => authModal.classList.add('hidden'));
+
+    // --- CHUYỂN ĐỔI LOGIN <-> REGISTER ---
+    if (switchAuthMode) {
+        switchAuthMode.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLoginMode = !isLoginMode;
+            if (isLoginMode) {
+                authTitle.textContent = "Đăng nhập";
+                authSubmitBtn.textContent = "Đăng nhập";
+                switchAuthMode.textContent = "Chưa có tài khoản? Đăng ký ngay";
+            } else {
+                authTitle.textContent = "Đăng ký";
+                authSubmitBtn.textContent = "Đăng ký";
+                switchAuthMode.textContent = "Đã có tài khoản? Đăng nhập";
+            }
+            authError.style.display = 'none';
+        });
+    }
+
+    // --- XỬ LÝ SUBMIT (GỌI API) ---
+    if (authSubmitBtn) {
+        authSubmitBtn.addEventListener('click', async () => {
+            const username = authUsernameInput.value.trim();
+            const password = authPasswordInput.value.trim();
+
+            if (!username || !password) {
+                authError.textContent = "Vui lòng nhập đầy đủ thông tin!";
+                authError.style.display = 'block';
+                return;
+            }
+
+            authSubmitBtn.textContent = "Đang xử lý...";
+            authSubmitBtn.disabled = true;
+
+            // URL BACKEND CỦA BẠN (Render)
+            // ĐÚNG: Link Backend (có chữ backend hoặc render)
+            const BASE_URL = 'https://doanchuyennganh-backend.onrender.com';
+
+            // SAI: Link Frontend, hoặc thiếu https, hoặc dư dấu /
+            const endpoint = isLoginMode ? '/login' : '/register';
+
+            try {
+                const res = await fetch(`${BASE_URL}${endpoint}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.error || 'Có lỗi xảy ra');
+                }
+
+                if (isLoginMode) {
+                    // --- ĐĂNG NHẬP THÀNH CÔNG ---
+                    // 1. Lưu Token vào LocalStorage (Quan trọng nhất)
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('username', data.username);
+
+                    // 2. Cập nhật giao diện
+                    updateAuthUI();
+                    authModal.classList.add('hidden');
+                    alert("Đăng nhập thành công!");
+                } else {
+                    // --- ĐĂNG KÝ THÀNH CÔNG ---
+                    alert("Đăng ký thành công! Hãy đăng nhập ngay.");
+                    // Chuyển sang màn hình đăng nhập
+                    switchAuthMode.click();
+                }
+
+            } catch (err) {
+                authError.textContent = err.message;
+                authError.style.display = 'block';
+            } finally {
+                authSubmitBtn.disabled = false;
+                authSubmitBtn.textContent = isLoginMode ? "Đăng nhập" : "Đăng ký";
+            }
+        });
+    }
+
+    // --- XỬ LÝ ĐĂNG XUẤT ---
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            updateAuthUI();
+            alert("Đã đăng xuất.");
+        });
+    }
+
+    // --- KHỞI TẠO: Kiểm tra xem đã đăng nhập chưa ---
+    updateAuthUI();
 });
