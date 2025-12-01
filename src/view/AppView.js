@@ -1,72 +1,64 @@
 export class AppView {
     constructor() {
+        // Khởi tạo Editor
         this.editor = ace.edit("editor");
         this.editor.setTheme("ace/theme/monokai");
-        this.editor.setOptions({
-            enableBasicAutocompletion: true,
-            enableLiveAutocompletion: true,
-            fontSize: "14pt",
-        });
+        this.editor.session.setMode("ace/mode/python");
+        this.editor.setOptions({ enableBasicAutocompletion: true, enableLiveAutocompletion: true, fontSize: "14px" });
 
+        // DOM Elements
         this.elements = {
+            fileTree: document.getElementById("fileTree"),
             runBtn: document.getElementById("runBtn"),
             terminal: document.getElementById("terminal"),
-            fileTree: document.getElementById("fileTree"),
-            tabs: document.getElementById("tabs"),
             newFileBtn: document.getElementById("newFileBtn"),
             newFolderBtn: document.getElementById("newFolderBtn"),
             refreshBtn: document.getElementById("refreshBtn"),
-            collapseBtn: document.getElementById("collapseBtn"),
-            themeToggle: document.getElementById("themeToggle"),
+            collapseBtn: document.getElementById("collapseBtn")
         };
     }
 
-    renderTree(vfs, onFileClick) {
+    // Vẽ cây thư mục (Đệ quy)
+    renderTree(vfs, activePath, onFileClick) {
         this.elements.fileTree.innerHTML = '';
-        Object.keys(vfs).sort().forEach(filename => {
+        this._renderNode(vfs, this.elements.fileTree, '', activePath, onFileClick);
+    }
+
+    _renderNode(treeNode, container, parentPath, activePath, onFileClick) {
+        const entries = Object.entries(treeNode).sort(([, a], [, b]) => {
+            if (a.type === 'folder' && b.type === 'file') return -1;
+            if (a.type === 'file' && b.type === 'folder') return 1;
+            return a.name?.localeCompare(b.name);
+        });
+
+        for (const [name, node] of entries) {
+            const path = parentPath ? `${parentPath}/${name}` : name;
             const li = document.createElement('li');
-            li.className = 'tree-item file';
-            li.innerHTML = '<span class= "icon">📄</span>' + filename;
-            li.onclick = () => onFileClick(filename);
-            this.elements.fileTree.appendChild(li);
-        });
-    }
-
-    renderTabs(activeFilename, openFiles, onTabClick, onCloseClick) {
-        this.elements.tabs.innerHTML = '';
-        openFiles.forEach(filename => {
-            const btn = document.createElement('button');
-            btn.className = 'file-tab' + (filename === activeFilename ? ' active' : '');
-            btn.innerHTML =
-                `<span class="name">${filename}</span>
-            <span class="close-btn" title="Đóng tệp tin">×</span>`;
-            btn.onclick = () => onTabClick(filename);
-            btn.querySelector('.close-btn').onclick = (e) => {
-                e.stopPropagation();
-                onCloseClick(filename);
-            };
-            this.elements.tabs.appendChild(btn);
-        });
-    }
-
-    logTerminal(type, message) {
-        let colorClass = type === 'error' ? 'terminal-error' :
-            type === 'info' ? 'terminal-info' : 'terminal-output';
-
-        const safeText = message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        this.elements.terminal.innerHTML += `<span class="${colorClass}">${safeText}</span>\n`;
-        this.elements.terminal.scrollTop = this.elements.terminal.scrollHeight;
-    }
-
-    toggleTheme(isLight) {
-        if (isLight) {
-            document.body.classList.add('theme-light');
-            document.body.classList.remove('theme-dark');
-            this.editor.setTheme("ace/theme/github");
-        } else {
-            document.body.classList.add('theme-dark');
-            document.body.classList.remove('theme-light');
-            this.editor.setTheme("ace/theme/monokai");
+            
+            if (node.type === 'folder') {
+                li.className = 'tree-item-folder open';
+                li.innerHTML = `<div class="tree-item folder">📁 ${name}</div><ul class="nested"></ul>`;
+                li.querySelector('.tree-item').onclick = (e) => {
+                    e.stopPropagation();
+                    li.classList.toggle('open');
+                };
+                const ul = li.querySelector('ul');
+                if (node.children) this._renderNode(node.children, ul, path, activePath, onFileClick);
+            } else {
+                const isActive = path === activePath ? 'active' : '';
+                // Bạn có thể thêm hàm getIcon ở đây sau
+                li.innerHTML = `<div class="tree-item file ${isActive}">📄 ${name}</div>`;
+                li.onclick = (e) => {
+                    e.stopPropagation();
+                    onFileClick(path); // Gọi ngược về Controller
+                };
+            }
+            container.appendChild(li);
         }
-    }   
+    }
+
+    logTerminal(message, type = 'info') {
+        let color = type === 'error' ? 'color: #ff6b6b;' : 'color: #cfe8ff;';
+        this.elements.terminal.innerHTML += `<div style="${color}">${message}</div>`;
+    }
 }

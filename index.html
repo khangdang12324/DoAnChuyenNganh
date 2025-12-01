@@ -37,9 +37,9 @@
 
 <body class="theme-dark">
   <header class="topbar">
-    
+
     <div class="top-left">
-      
+
       <a class="logo" href="#">
         <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081010/Logo-mini_p1obee.png"
           alt="IDE Online Logo" class="brand-logo" />
@@ -97,44 +97,49 @@
       </label>
       <button class="btn-dark-pill">🔗 Chia sẻ</button>
       <button id="signinBtn" class="btn-accent-pill">Đăng nhập</button>
-<span id="userDisplay" style="font-size: 13px; font-weight: bold; display: none;"></span>
-<button id="logoutBtn" class="btn-dark-pill" style="display: none;">Đăng xuất</button>
+      <span id="userDisplay" style="font-size: 13px; font-weight: bold; display: none;"></span>
+      <button id="logoutBtn" class="btn-dark-pill" style="display: none;">Đăng xuất</button>
     </div>
-    
+
   </header>
 
 
   <main class="layout">
     <aside class="activity-bar">
-            <div class="activity-top">
-                <div class="activity-item active" title="Explorer (Ctrl+Shift+E)" id="actExplorer">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 3h18v18H3zM9 3v18"/>
-                    </svg>
-                </div>
-                <div class="activity-item" title="Search">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
-                    </svg>
-                </div>
-                <div class="activity-item" title="Source Control">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/>
-                    </svg>
-                </div>
-            </div>
-            
-            <div class="activity-bottom">
-                <div class="activity-item" title="Settings" id="actSettings">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                    </svg>
-                </div>
-            </div>
-        </aside>
+      <div class="activity-top">
+        <div class="activity-item active" title="Explorer (Ctrl+Shift+E)" id="actExplorer">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 3h18v18H3zM9 3v18" />
+          </svg>
+        </div>
+        <div class="activity-item" title="Search">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+        </div>
+        <div class="activity-item" title="Source Control">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="18" r="3" />
+            <circle cx="6" cy="6" r="3" />
+            <path d="M6 21V9a9 9 0 0 0 9 9" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="activity-bottom">
+        <div class="activity-item" title="Settings" id="actSettings">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+          </svg>
+        </div>
+      </div>
+    </aside>
     <!-- Editor -->
     <aside class="file-explorer">
-      
+
       <div class="file-explorer-header">
         <span>TỆP TIN</span>
         <div class="explorer-actions">
@@ -186,28 +191,41 @@
         </div>
       </div>
     </div>
-
+    <!-- // Authentication Modal -->
     <div id="authModal" class="modal-overlay hidden">
-        <div class="modal-content" style="width: 350px;">
-            <h3 id="authTitle">Đăng nhập</h3>
+      <div class="modal-content" style="width: 350px;">
+        <h3 id="authTitle">Đăng nhập</h3>
+
+        <div class="form-group">
+          <label>Tên đăng nhập</label>
+          <input type="text" id="authUsername" class="modal-input" placeholder="Nhập username...">
+        </div>
+        <div class="form-group">
+          <label>Mật khẩu</label>
+          <input type="password" id="authPassword" class="modal-input" placeholder="Nhập password...">
+        </div>
+
+        <div id="authMessage" class="auth-message hidden"></div>
+
+        <div class="modal-actions" style="justify-content: space-between; align-items: center;">
+          <a href="#" id="switchAuthMode" style="font-size: 13px; color: #007acc;">Chưa có tài khoản?</a>
+          <div>
+            <button id="authCancelBtn" class="btn modal-btn-cancel">Hủy</button>
+            <button id="authSubmitBtn" class="btn modal-btn-create">Đăng nhập</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!--Exit-->
+  <div id="logoutModal" class="modal-overlay hidden">
+        <div class="confirm-modal-content" style="border: 1px solid #ff6b6b;">
+            <h3 style="margin-top: 0; font-size: 16px; color: #ff6b6b;">Đăng xuất</h3>
+            <p style="font-size: 14px; margin: 15px 0;">Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?</p>
             
-            <div class="form-group">
-                <label>Tên đăng nhập</label>
-                <input type="text" id="authUsername" class="modal-input" placeholder="Nhập username...">
-            </div>
-            <div class="form-group">
-                <label>Mật khẩu</label>
-                <input type="password" id="authPassword" class="modal-input" placeholder="Nhập password...">
-            </div>
-
-            <p id="authError" style="color: #ff6b6b; font-size: 13px; display: none;"></p>
-
-            <div class="modal-actions" style="justify-content: space-between; align-items: center;">
-                <a href="#" id="switchAuthMode" style="font-size: 13px; color: #007acc;">Chưa có tài khoản?</a>
-                <div>
-                    <button id="authCancelBtn" class="btn modal-btn-cancel">Hủy</button>
-                    <button id="authSubmitBtn" class="btn modal-btn-create">Đăng nhập</button>
-                </div>
+            <div class="confirm-actions">
+                <button id="btnCancelLogout" class="btn btn-secondary">Hủy</button>
+                <button id="btnConfirmLogout" class="btn btn-primary" style="background-color: #ff6b6b;">Đăng xuất</button>
             </div>
         </div>
     </div>

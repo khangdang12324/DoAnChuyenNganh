@@ -717,26 +717,33 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- XỬ LÝ SUBMIT (GỌI API) ---
+    // --- HÀM HIỂN THỊ THÔNG BÁO (Helper) ---
+    const authMessage = document.getElementById('authMessage');
+
+    function showAuthMsg(msg, type) {
+        authMessage.textContent = msg;
+        authMessage.classList.remove('hidden', 'error', 'success');
+        authMessage.classList.add(type); // type là 'error' hoặc 'success'
+    }
+
+    // --- XỬ LÝ NÚT SUBMIT ---
     if (authSubmitBtn) {
         authSubmitBtn.addEventListener('click', async () => {
             const username = authUsernameInput.value.trim();
             const password = authPasswordInput.value.trim();
 
+            // Reset thông báo cũ
+            authMessage.classList.add('hidden');
+
             if (!username || !password) {
-                authError.textContent = "Vui lòng nhập đầy đủ thông tin!";
-                authError.style.display = 'block';
+                showAuthMsg("Vui lòng nhập đầy đủ thông tin!", "error");
                 return;
             }
 
             authSubmitBtn.textContent = "Đang xử lý...";
             authSubmitBtn.disabled = true;
 
-            // URL BACKEND CỦA BẠN (Render)
-            // ĐÚNG: Link Backend (có chữ backend hoặc render)
             const BASE_URL = 'https://doanchuyennganh-backend.onrender.com';
-
-            // SAI: Link Frontend, hoặc thiếu https, hoặc dư dấu /
             const endpoint = isLoginMode ? '/login' : '/register';
 
             try {
@@ -746,6 +753,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ username, password })
                 });
 
+                // DEBUG: Kiểm tra xem server trả về HTML hay JSON
+                const contentType = res.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") === -1) {
+                    throw new Error("Lỗi Server (Trả về HTML). Vui lòng thử lại sau.");
+                }
+
                 const data = await res.json();
 
                 if (!res.ok) {
@@ -753,25 +766,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 if (isLoginMode) {
-                    // --- ĐĂNG NHẬP THÀNH CÔNG ---
-                    // 1. Lưu Token vào LocalStorage (Quan trọng nhất)
+                   
                     localStorage.setItem('token', data.token);
                     localStorage.setItem('username', data.username);
 
-                    // 2. Cập nhật giao diện
-                    updateAuthUI();
-                    authModal.classList.add('hidden');
-                    alert("Đăng nhập thành công!");
+                 
+                    showAuthMsg("Đăng nhập thành công!", "success");
+
+                  
+                    setTimeout(() => {
+                        updateAuthUI();
+                        authModal.classList.add('hidden');
+                   
+                        authMessage.classList.add('hidden');
+                        authUsernameInput.value = '';
+                        authPasswordInput.value = '';
+                    }, 100);
+
                 } else {
-                    // --- ĐĂNG KÝ THÀNH CÔNG ---
-                    alert("Đăng ký thành công! Hãy đăng nhập ngay.");
-                    // Chuyển sang màn hình đăng nhập
-                    switchAuthMode.click();
+       
+                    showAuthMsg("Đăng ký thành công! Đang chuyển sang đăng nhập...", "success");
+
+                    setTimeout(() => {
+                        switchAuthMode.click();
+                        authMessage.classList.add('hidden'); 
+                        authUsernameInput.focus();
+                    }, 500);
                 }
 
             } catch (err) {
-                authError.textContent = err.message;
-                authError.style.display = 'block';
+              
+                showAuthMsg(err.message, "error");
             } finally {
                 authSubmitBtn.disabled = false;
                 authSubmitBtn.textContent = isLoginMode ? "Đăng nhập" : "Đăng ký";
@@ -779,16 +804,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- XỬ LÝ ĐĂNG XUẤT ---
+ // =========================================================
+    // 11. LOGIC ĐĂNG XUẤT (LOGOUT)
+    // =========================================================
+    
+    const logoutModal = document.getElementById('logoutModal');
+    const btnConfirmLogout = document.getElementById('btnConfirmLogout');
+    const btnCancelLogout = document.getElementById('btnCancelLogout');
+
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('token');
-            localStorage.removeItem('username');
-            updateAuthUI();
-            alert("Đã đăng xuất.");
+            logoutModal.classList.remove('hidden');
         });
     }
 
-    // --- KHỞI TẠO: Kiểm tra xem đã đăng nhập chưa ---
+    if (btnConfirmLogout) {
+        btnConfirmLogout.addEventListener('click', () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('username');
+            updateAuthUI();
+            logoutModal.classList.add('hidden');
+
+        });
+    }
+
+    if (btnCancelLogout) {
+        btnCancelLogout.addEventListener('click', () => {
+            logoutModal.classList.add('hidden');
+        });
+    }
+    
+
+    if (logoutModal) {
+        logoutModal.addEventListener('click', (e) => {
+            if (e.target === logoutModal) logoutModal.classList.add('hidden');
+        });
+    }
+
+
     updateAuthUI();
 });

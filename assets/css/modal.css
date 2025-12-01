@@ -192,12 +192,29 @@ select.modal-input {
     text-decoration: underline;
 }
 
-/* Thông báo lỗi */
-#authError {
-    background: rgba(255, 107, 107, 0.1);
-    color: #ff6b6b;
-    padding: 8px;
+/* --- THÔNG BÁO TRONG MODAL --- */
+.auth-message {
+    font-size: 13px;
+    padding: 10px;
+    margin-top: 15px;
     border-radius: 4px;
-    border-left: 3px solid #ff6b6b;
-    margin-top: 10px;
+    text-align: center;
+}
+
+.auth-message.hidden {
+    display: none;
+}
+
+/* Giao diện Lỗi (Màu Đỏ) */
+.auth-message.error {
+    background-color: rgba(248, 81, 73, 0.1); /* Nền đỏ nhạt */
+    color: #ff6b6b; /* Chữ đỏ */
+    border: 1px solid #ff6b6b;
+}
+
+/* Giao diện Thành công (Màu Xanh) */
+.auth-message.success {
+    background-color: rgba(46, 160, 67, 0.15); /* Nền xanh nhạt */
+    color: #3fb950; /* Chữ xanh lá (VS Code style) */
+    border: 1px solid #3fb950;
 }
