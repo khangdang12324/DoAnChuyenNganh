@@ -1,0 +1,85 @@
+.workbench {
+    grid-area: workbench; min-width: 0;
+    display: flex; flex-direction: column; min-height: 0;
+    background: #1e1e1e; border-radius: 8px;
+}
+.editor { position: relative; flex: 1; min-height: 0; background: #0f1115; }
+
+.gutter {
+    grid-area: gutter; background: #2b2f39; cursor: col-resize;
+    box-shadow: inset -1px 0 0 #000, inset 1px 0 0 #000;
+}
+.gutter:hover { background: #3a3a3a; }
+
+/* Tabbar (Code cũ - nếu bạn còn giữ) */
+.file-tabbar {
+    height: 40px; background: #1e1e1e; color: #ddd;
+    display: flex; align-items: center;
+    border-bottom: 1px solid #2a2a2a; padding: 0 8px; gap: 8px;
+}
+.file-tabs { display: flex; align-items: center; gap: 6px; flex: 1; overflow-x: auto; }
+.file-tab {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 28px; padding: 0 10px;
+    border: 1px solid #3a3a3a; border-radius: 4px;
+    background: #2a2a2a; color: #ddd;
+    cursor: pointer; user-select: none;
+}
+.file-tab:hover { background: #333; }
+.file-tab.active {
+    background: #008c8c; border-color: #138d83; color: #fff;
+}
+/* --- MÀN HÌNH CHÀO MỪNG (WELCOME SCREEN) --- */
+.welcome-screen {
+    flex: 1;
+    background-color: #1e1e1e;
+    color: #cccccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.welcome-content {
+    max-width: 600px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Chia 2 cột: Start | Recent */
+    gap: 40px;
+}
+
+/* Logo & Title (Chiếm hết chiều ngang) */
+.welcome-logo, .welcome-content h1, .welcome-content .subtitle {
+    grid-column: span 2;
+}
+
+.welcome-logo img { width: 64px; height: 64px; opacity: 0.8; margin-bottom: 10px; }
+.welcome-content h1 { font-size: 24px; margin: 0; font-weight: 500; color: #ffffff; }
+.welcome-content .subtitle { font-size: 16px; color: #666; margin-bottom: 30px; }
+
+/* Cột Start & Recent */
+.welcome-content h3 { font-size: 18px; font-weight: 400; margin-bottom: 10px; color: #ffffff; }
+.welcome-content ul { list-style: none; padding: 0; }
+.welcome-content li { margin-bottom: 8px; }
+
+/* Nút bấm dạng link */
+.link-btn {
+    background: none; border: none;
+    color: #3794ff; cursor: pointer;
+    font-size: 14px; padding: 0;
+    text-align: left; display: flex; align-items: center; gap: 8px;
+}
+.link-btn:hover { text-decoration: underline; }
+.link-btn .icon { width: 20px; text-align: center; color: #cccccc; }
+
+/* Recent List Items */
+.recent-item {
+    cursor: pointer; padding: 5px 0; font-size: 13px; color: #3794ff;
+}
+.recent-item:hover { color: #ffffff; }
+.recent-item span { display: block; color: #888; font-size: 11px; }
+
+/* Helper để ẩn hiện Editor */
+.editor.hidden { display: none !important; }
+.welcome-screen.hidden { display: none !important; }

@@ -57,7 +57,7 @@
     gap: 0;
     height: calc(100vh - 48px - 22px);
     min-height: 0;
-    
+
 }
 
 /* STATUS BAR */
@@ -72,7 +72,13 @@
     padding: 0 10px;
     font-size: 12px;
     user-select: none;
-    z-index: 100;
+    position: fixed;
+    /* Cố định */
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    /* Chiếm hết chiều ngang */
+    z-index: 9999;
 }
 
 body.theme-light .status-bar {
@@ -117,24 +123,272 @@ body.theme-light .status-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer; /* 1. Con trỏ bàn tay */
-    color: #858585;  /* Màu xám mặc định */
+    cursor: pointer;
+    /* 1. Con trỏ bàn tay */
+    color: #858585;
+    /* Màu xám mặc định */
     position: relative;
-    transition: color 0.2s; /* Hiệu ứng mượt */
+    transition: color 0.2s;
+    /* Hiệu ứng mượt */
 }
 
 /* Khi di chuột vào (Hover) */
 .activity-item:hover {
-    color: #fff; /* 2. Sáng lên màu trắng */
+    color: #fff;
+    /* 2. Sáng lên màu trắng */
 }
 
 /* Khi đang chọn (Active) */
 .activity-item.active {
     color: #fff;
-    border-left: 2px solid var(--accent-color); /* 3. Viền sáng bên trái */
+    border-left: 2px solid var(--accent-color);
+    /* 3. Viền sáng bên trái */
 }
 
 .activity-item svg {
     width: 24px;
     height: 24px;
 }
+
+/* CSS Project Item */
+.project-item {
+    background: #333;
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #444;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-item:hover {
+    background: #444;
+    border-color: #007acc;
+}
+
+.project-name {
+    font-weight: bold;
+    color: #fff;
+}
+
+.project-date {
+    font-size: 12px;
+    color: #aaa;
+}
+
+
+.btn-dark-pill {
+    white-space: nowrap;
+    /* Bắt buộc không xuống dòng */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: auto;
+    /* Cho phép co nhỏ */
+}
+
+/* ========================================================== */
+/* FIX GIAO DIỆN MOBILE & TABLET (< 1024px) */
+/* ========================================================== */
+
+@media (max-width: 1024px) {
+
+    .layout {
+        display: grid !important;
+        grid-template-columns: 50px 1fr !important;
+
+
+        grid-template-rows: 1fr 10px 200px;
+
+        grid-template-areas:
+            "activity workbench"
+            "activity gutter"
+            /* <-- Thêm vùng này */
+            "activity terminal" !important;
+
+        height: calc(100vh - 48px) !important;
+        overflow: hidden;
+    }
+
+    /* 2. HIỆN THANH KÉO (GUTTER) ĐỂ KÉO DỌC */
+    .gutter {
+        display: block !important;
+        /* Bắt buộc hiện */
+        grid-area: gutter;
+        cursor: row-resize !important;
+        /* Con trỏ kéo dọc */
+        background-color: #1e1e1e;
+        border-top: 1px solid #333;
+        border-bottom: 1px solid #333;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+    }
+
+    /* 2. HIỆN LẠI LOGO */
+    .logo {
+        display: flex !important;
+        /* Bắt buộc hiện */
+        max-width: 120px;
+        /* Giới hạn chiều rộng để không đẩy nút khác */
+        overflow: hidden;
+    }
+
+    .brand-logo {
+        height: 24px;
+        /* Thu nhỏ logo chút cho vừa điện thoại */
+    }
+
+    /* Chỉnh Topbar cho đỡ chật */
+    .topbar {
+        padding: 0 5px;
+        gap: 5px;
+    }
+
+    /* Ẩn bớt tên User nếu chật quá, chỉ hiện nút Đăng xuất */
+    #userDisplay {
+        display: none !important;
+    }
+
+    /* 3. TERMINAL: Cố định ở dưới */
+    .terminal-panel {
+        grid-area: terminal;
+        display: flex !important;
+        background-color: #1e1e1e;
+        border-top: 1px solid #333;
+        z-index: 10;
+        min-height: 0;
+    }
+
+    /* 4. SIDEBAR (Cây thư mục): Trôi nổi (Overlay) */
+    /* Khi dùng điện thoại, Sidebar sẽ ẩn đi, bấm nút mới hiện đè lên */
+    .file-explorer {
+        position: fixed !important;
+        top: 48px;
+        left: 50px;
+        bottom: 0;
+        width: 80% !important;
+        /* Rộng 80% màn hình điện thoại cho dễ bấm */
+        max-width: 300px;
+        z-index: 9999;
+        /* Đè lên tất cả */
+
+        background-color: #1e1e1e;
+        border-right: 1px solid #444;
+        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
+
+        display: none !important;
+        /* Mặc định ẩn */
+    }
+
+    .file-explorer.mobile-open {
+        display: flex !important;
+        /* Hiện khi có class này */
+    }
+
+    /* Reset lại vị trí cho tất cả các modal */
+    .modal-content,
+    .project-modal-box {
+        /* Kích thước */
+        width: 90% !important;
+        /* Chiếm 90% chiều ngang */
+        max-width: 400px !important;
+        /* Không quá to */
+        height: auto !important;
+        /* Chiều cao tự động */
+        max-height: 80vh !important;
+        /* Tối đa 80% màn hình */
+
+        /* Căn giữa tuyệt đối (Centering Trick) */
+        position: fixed !important;
+        top: 50% !important;
+        left: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        /* Dịch ngược lại 50% kích thước của nó */
+
+        /* Reset margin cũ */
+        margin: 0 !important;
+
+        /* Đảm bảo nó nổi lên trên cùng */
+        z-index: 10000 !important;
+
+        /* Cho phép cuộn nội dung bên trong nếu dài quá */
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Phần danh sách dự án cần cuộn được */
+    .pm-body,
+    #projectListContainer {
+        flex: 1;
+        overflow-y: auto;
+        min-height: 150px;
+        /* Đảm bảo có chỗ để hiện */
+    }
+
+    /* Nút bấm xếp dọc cho dễ bấm */
+    .pm-footer,
+    .modal-actions {
+        flex-direction: column-reverse;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .pm-footer button,
+    .modal-actions button {
+        width: 100%;
+    }
+
+    .project-actions {
+        opacity: 1 !important;
+    }
+
+    .delete-project-btn {
+        opacity: 1 !important;
+    }
+
+}
+.project-actions {
+    display: flex;
+    gap: 10px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+
+.project-item:hover .project-actions {
+    opacity: 1;
+}
+
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    border-radius: 4px;
+    color: #858585;
+}
+.action-btn:hover { color: #fff; background-color: rgba(255,255,255,0.1); }
+.delete-btn:hover { color: #ff6b6b; }
+/* --- FIX LỖI Z-INDEX (Bảng Xóa phải cao hơn Bảng Dự án) --- */
+#deleteConfirmModal {
+    z-index: 99999 !important; /* Cao hơn 10000 */
+}
+
+/* Trong style.css */
+.project-rename-input {
+    background: #3c3c3c;
+    color: white;
+    border: 1px solid #007acc;
+    padding: 2px 5px;
+    border-radius: 2px;
+    outline: none;
+    font-size: 13px;
+    width: 100%;
+}
+
+.hidden { display: none !important; }

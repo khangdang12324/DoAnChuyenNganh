@@ -1,0 +1,81 @@
+/* ======================================== */
+/* TERMINAL STYLE (VS CODE THEME) */
+/* ======================================== */
+
+.terminal-panel {
+    grid-area: terminal;
+    background-color: #1e1e1e; /* Nền đen VS Code */
+    border-top: 1px solid #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.term-toolbar {
+    height: 28px; /* Thanh tiêu đề nhỏ gọn */
+    background-color: #252526;
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #bbb;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Phần nội dung Log */
+.terminal-body {
+    flex: 1;
+    padding: 8px 15px;
+    overflow-y: auto;
+    font-family: 'Consolas', 'Courier New', monospace; /* Font code */
+    font-size: 13px;
+    line-height: 1.4; /* Dòng khít lại */
+    color: #cccccc;
+    white-space: pre-wrap; /* Giữ định dạng xuống dòng của code */
+}
+
+/* --- MÀU SẮC LOG --- */
+
+/* Một dòng log */
+.term-entry {
+    margin-bottom: 4px; /* Khoảng cách nhỏ giữa các lần log */
+    display: block;
+}
+
+/* Tin nhắn hệ thống: [Running] ... */
+.term-system {
+    color: #569cd6; /* Xanh dương */
+    font-weight: bold;
+    border-top: 1px dashed #333; /* Kẻ ngang phân cách các lần chạy */
+    padding-top: 8px;
+    margin-top: 8px;
+}
+
+/* Lỗi: Đỏ */
+.term-error {
+    color: #f14c4c;
+}
+
+/* Cảnh báo: Vàng */
+.term-warn {
+    color: #cca700;
+}
+
+/* Thành công/Kết thúc: Xanh lá nhạt */
+.term-success {
+    color: #4ec9b0;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* Thời gian [10:00:00] */
+.term-time {
+    color: #808080;
+    margin-right: 8px;
+    font-weight: normal;
+    font-size: 11px;
+}

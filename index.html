@@ -112,6 +112,14 @@
             <path d="M3 3h18v18H3zM9 3v18" />
           </svg>
         </div>
+        <div class="activity-item" id="actProject" title="Project Manager">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+            <line x1="9" y1="13" x2="15" y2="13"></line>
+            <line x1="12" y1="10" x2="12" y2="16"></line>
+          </svg>
+        </div>
         <div class="activity-item" title="Search">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8" />
@@ -141,8 +149,9 @@
     <aside class="file-explorer">
 
       <div class="file-explorer-header">
-        <span>TỆP TIN</span>
+        <span>CODE SPARKX</span>
         <div class="explorer-actions">
+
           <button id="newFileBtn" class="icon-btn" title="Thêm tệp tin">📄</button>
           <button id="newFolderBtn" class="icon-btn" title="Thêm thư mục">📁</button>
           <button id="refreshBtn" class="icon-btn" title="Làm mới">🔄</button>
@@ -160,6 +169,7 @@
       </div>
 
       <div id="editor" class="editor"></div>
+
     </section>
     <!-- Thanh kéo chia 2 pane -->
     <div class="gutter" id="gutterX" aria-hidden="true"></div>
@@ -172,11 +182,15 @@
       <div id="terminal" class="terminal-body"></div>
 
     </section>
-    <ul id="contextMenu" class="context-menu hidden">
-      <li id="ctxRename">✏️ Đổi tên</li>
-      <li id="ctxDelete" style="color: #ff6b6b;">🗑️ Xóa</li>
-      <li class="separator"></li>
-      <li id="ctxDownload">⬇️ Tải về</li>
+  <ul id="contextMenu" class="context-menu hidden">
+        <li id="ctxRename">✏️ Đổi tên <span style="margin-left:auto;color:#666;font-size:11px">F2</span></li>
+        <li id="ctxCut">✂️ Cắt <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+X</span></li>
+        <li id="ctxCopy">📄 Sao chép <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+C</span></li>
+        <li id="ctxPaste">📋 Dán <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+V</span></li>
+        <li class="separator"></li>
+        <li id="ctxDownload">⬇️ Tải về</li>
+        <li class="separator"></li>
+        <li id="ctxDelete" style="color: #ff6b6b;">🗑️ Xóa <span style="margin-left:auto;color:#ff6b6b;font-size:11px">Del</span></li>
     </ul>
 
     <div id="deleteConfirmModal" class="modal-overlay hidden">
@@ -217,18 +231,84 @@
       </div>
     </div>
 
-  <!--Exit-->
-  <div id="logoutModal" class="modal-overlay hidden">
-        <div class="confirm-modal-content" style="border: 1px solid #ff6b6b;">
-            <h3 style="margin-top: 0; font-size: 16px; color: #ff6b6b;">Đăng xuất</h3>
-            <p style="font-size: 14px; margin: 15px 0;">Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?</p>
-            
-            <div class="confirm-actions">
-                <button id="btnCancelLogout" class="btn btn-secondary">Hủy</button>
-                <button id="btnConfirmLogout" class="btn btn-primary" style="background-color: #ff6b6b;">Đăng xuất</button>
+    <div id="logoutModal" class="modal-overlay hidden">
+      <div class="confirm-modal-content" style="border: 1px solid #ff6b6b;">
+        <h3 style="margin-top: 0; font-size: 16px; color: #ff6b6b;">Đăng xuất</h3>
+        <p style="font-size: 14px; margin: 15px 0;">Bạn có chắc chắn muốn đăng xuất?</p>
+        <div class="confirm-actions">
+          <button id="btnCancelLogout" class="btn btn-secondary">Hủy</button>
+          <button id="btnConfirmLogout" class="btn btn-primary" style="background-color: #ff6b6b;">Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!--Exit-->
+    <div id="logoutModal" class="modal-overlay hidden">
+      <div class="confirm-modal-content" style="border: 1px solid #ff6b6b;">
+        <h3 style="margin-top: 0; font-size: 16px; color: #ff6b6b;">Đăng xuất</h3>
+        <p style="font-size: 14px; margin: 15px 0;">Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?</p>
+
+        <div class="confirm-actions">
+          <button id="btnCancelLogout" class="btn btn-secondary">Hủy</button>
+          <button id="btnConfirmLogout" class="btn btn-primary" style="background-color: #ff6b6b;">Đăng xuất</button>
+        </div>
+      </div>
+    </div>
+    <!-- Quan ly du an  -->
+    <div id="projectManagerModal" class="modal-overlay hidden">
+      <div class="modal-content" style="width: 500px; height: 400px; display: flex; flex-direction: column;">
+
+        <div
+          style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid #444; padding-bottom: 10px;">
+          <h3 style="margin:0;">Danh sách Dự án</h3>
+          <div>
+            <button id="pmNewProjectBtn" class="btn modal-btn-create">+ Dự án mới</button>
+          </div>
+        </div>
+
+        <div id="projectListContainer" style="flex: 1; overflow-y: auto; padding-right: 5px;">
+          <p style="text-align:center; color:#888;">Đang tải...</p>
+        </div>
+
+        <div class="modal-actions" style="border-top: 1px solid #444; padding-top: 15px;">
+          <button id="pmLogoutBtn" class="btn"
+            style="background: transparent; color: #ff6b6b; border: 1px solid #ff6b6b; margin-right: auto;">Đăng
+            xuất</button>
+          <button id="pmCloseBtn" class="btn modal-btn-cancel">Đóng</button>
+        </div>
+      </div>
+    </div>
+    <!-- khung tao/xoa du an moi -->
+    <div id="createProjectModal" class="modal-overlay hidden">
+        <div class="modal-content" style="width: 380px;">
+            <h3>Tạo dự án mới</h3>
+            <div class="form-group">
+                <label>Tên dự án</label>
+                <input type="text" id="newProjectInput" class="modal-input">
+            </div>
+            <div class="modal-actions">
+                <button id="btnCancelCreateProj" class="btn modal-btn-cancel">Hủy</button>
+                <button id="btnConfirmCreateProj" class="btn modal-btn-create">Tạo ngay</button>
             </div>
         </div>
     </div>
+
+    <div id="createProjectModal" class="modal-overlay hidden">
+        <div class="modal-content" style="width: 380px;">
+            <h3 style="margin-top:0;">Tạo dự án mới</h3>
+            <div class="form-group">
+                <label>Tên dự án</label>
+                <input type="text" id="newProjectInput" class="modal-input" placeholder="Ví dụ: Bài tập lớn...">
+            </div>
+            <div class="modal-actions">
+                <button id="btnCancelCreateProj" class="btn modal-btn-cancel">Hủy</button>
+                <button id="btnConfirmCreateProj" class="btn modal-btn-create">Tạo ngay</button>
+            </div>
+        </div>
+    </div>
+
+    
   </main>
   <footer class="status-bar">
     <div class="status-left">
