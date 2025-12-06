@@ -7,7 +7,8 @@ export class AppController {
         this.view = new AppView();
         this.draggedPath = null;
         this.contextMenuTarget = null;
-        this.clipboard = null; // { action: 'copy'|'cut', path: '...' }
+        this.clipboard = null;
+        this.activeFile = null;
     }
 
     async init() {
@@ -50,7 +51,7 @@ export class AppController {
             else if (e.key === 'F2') this.handleRenameRequest();
             const ctxDownload = document.getElementById('ctxDownload');
 
-            
+
         });
 
         // 2. Context Menu (Click)
@@ -59,11 +60,11 @@ export class AppController {
         if (els.ctxDelete) els.ctxDelete.onclick = () => this.handleDeleteRequest();
         if (els.ctxRename) els.ctxRename.onclick = () => this.handleRenameRequest();
         if (ctxDownload) {
-                ctxDownload.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    this.handleDownload();
-                });
-            }
+            ctxDownload.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.handleDownload();
+            });
+        }
         // Các nút Copy/Cut/Paste trong menu (nếu có HTML)
         const ctxCopy = document.getElementById('ctxCopy');
         const ctxCut = document.getElementById('ctxCut');
@@ -197,8 +198,19 @@ export class AppController {
                 btnConfirm.parentNode.replaceChild(newBtn, btnConfirm);
                 this.view.elements.btnConfirmDelete = newBtn;
 
+                // Trong AppController.js -> handleDeleteRequest()
+
                 newBtn.onclick = () => {
+                    // 1. Xóa trong Model (Code cũ)
                     delete node.parent[node.name];
+
+                    // --- THÊM ĐOẠN NÀY: Kiểm tra nếu file đang xóa là file đang mở ---
+                    if (this.contextMenuTarget === this.model.activePath) {
+                        this.model.activePath = null; // Reset biến đường dẫn
+                        this.view.renderMainEditor(null); // Gọi View để ẩn Editor, hiện Logo
+                    }
+                    // -----------------------------------------------------------------
+
                     this.handleSaveProject();
                     this.updateFileTreeUI();
                     this.view.hideModal('deleteConfirmModal');
@@ -314,8 +326,6 @@ export class AppController {
     }
 
     _bindLayoutEvents() {
-        const statusIssues = document.getElementById('statusIssues');
-        if (statusIssues) statusIssues.addEventListener('click', () => this.toggleTerminal());
 
         const actExplorer = document.getElementById('actExplorer');
         if (actExplorer) actExplorer.addEventListener('click', (e) => { e.stopPropagation(); this.toggleSidebar(); });
@@ -395,16 +405,48 @@ export class AppController {
         this.view.showModal('projectManagerModal');
     }
 
+    // Trong AppController.js -> handleSelectProject()
+
     async handleSelectProject(id) {
         if (await this.model.loadProject(id)) {
             this.view.hideModal('projectManagerModal');
+
+            // --- SỬA ĐOẠN NÀY ---
+
+            // 1. Reset trạng thái về Màn hình chờ (Logo) trước tiên
+            this.model.activePath = null;
+            this.view.renderMainEditor(null); // Ẩn editor cũ, xóa breadcrumb cũ
+
+            // 2. Cập nhật cây thư mục
             this.updateFileTreeUI();
-            this.view.editor.setValue("");
-            const first = Object.keys(this.model.vfs).find(k => this.model.vfs[k].type === 'file');
-            if (first) this.switchFile(first);
+
+            // 3. Cập nhật Tên dự án trên góc trái
             this.view.updateProjectTitle(this.model.currentProjectName);
             this.view.logTerminal(`Đã mở: ${this.model.currentProjectName}`, "info");
-        } else this.view.logTerminal("Lỗi tải dự án", "error");
+
+            // 4. (Tùy chọn) Tự động mở file đầu tiên nếu có
+            const firstFile = this._findFirstFile(this.model.vfs); // Hàm tìm file mình viết thêm bên dưới
+            if (firstFile) {
+                this.switchFile(firstFile);
+            }
+
+            // --------------------
+        } else {
+            this.view.logTerminal("Lỗi tải dự án", "error");
+        }
+    }
+
+    // Hàm phụ trợ để tìm file đầu tiên trong cây thư mục (để mở cho tiện)
+    _findFirstFile(tree, parentPath = '') {
+        for (const [name, node] of Object.entries(tree)) {
+            const path = parentPath ? `${parentPath}/${name}` : name;
+            if (node.type === 'file') return path;
+            if (node.type === 'folder') {
+                const found = this._findFirstFile(node.children, path);
+                if (found) return found;
+            }
+        }
+        return null;
     }
 
     async submitCreateProject() {
@@ -483,7 +525,6 @@ export class AppController {
     handleDrop(target) {
         const source = this.draggedPath;
         if (source && source !== target && !target.startsWith(source + '/')) {
-            // Di chuyển luôn (No Alert)
             this.performMove(source, target);
         }
     }
@@ -494,40 +535,181 @@ export class AppController {
         else this.view.logTerminal(res.message, "error");
     }
 
+
+    // Trong src/mvc/controller/AppController.js
+
+    // 1. Sửa lại hàm mở file để nó tự gọi hàm lấy mode
     switchFile(path) {
         const node = this.model.findNode(path);
         if (!node || node.node.type !== 'file') return;
+
+        let isNewSession = false;
+
+        // Lazy load session
         if (!this.model.fileSessions[path]) {
-            const ext = path.split('.').pop();
-            const mode = ext === 'py' ? "ace/mode/python" : ext === 'js' ? "ace/mode/javascript" : "ace/mode/text";
-            this.model.fileSessions[path] = ace.createEditSession(node.node.content || "", mode);
+            const content = node.node.content || "";
+
+            // --- GỌI HÀM LẤY MODE TỰ ĐỘNG Ở ĐÂY ---
+            const mode = this._getAceMode(path);
+            // ---------------------------------------
+
+            this.model.fileSessions[path] = ace.createEditSession(content, mode);
+            isNewSession = true;
         }
-        this.view.editor.setSession(this.model.fileSessions[path]);
+
+        const session = this.model.fileSessions[path];
+        this.view.editor.setSession(session);
+
+        // Hiển thị Editor (Code cũ của bạn)
+        this.view.renderMainEditor({
+            name: node.name,
+            path: path,
+            content: session.getValue()
+        });
+
+        if (isNewSession) this.view.bindSessionEvents(session);
+
+        // ... (Giữ nguyên các phần update UI khác của bạn)
         this.model.activePath = path;
-        this.view.updateBreadcrumb(path);
         this.updateFileTreeUI();
+    }
+
+    // 2. HÀM QUAN TRỌNG NHẤT: BẢN ĐỒ NGÔN NGỮ
+    // Bạn muốn hỗ trợ ngôn ngữ nào, cứ thêm vào danh sách này
+    _getAceMode(filename) {
+        // Lấy đuôi file (ví dụ: main.cpp -> cpp)
+        const ext = filename.split('.').pop().toLowerCase();
+
+        const modeMap = {
+            // C / C++
+            'c': 'ace/mode/c_cpp',
+            'cpp': 'ace/mode/c_cpp',
+            'h': 'ace/mode/c_cpp',
+            'hpp': 'ace/mode/c_cpp',
+
+            // Java
+            'java': 'ace/mode/java',
+
+            // Python
+            'py': 'ace/mode/python',
+
+            // Web
+            'html': 'ace/mode/html',
+            'htm': 'ace/mode/html',
+            'js': 'ace/mode/javascript',
+            'ts': 'ace/mode/typescript',
+            'css': 'ace/mode/css',
+            'json': 'ace/mode/json',
+
+            // Backend khác
+            'php': 'ace/mode/php',
+            'sql': 'ace/mode/sql',
+            'go': 'ace/mode/golang',
+            'rb': 'ace/mode/ruby',
+            'cs': 'ace/mode/csharp', // C#
+
+            // Khác
+            'txt': 'ace/mode/text',
+            'md': 'ace/mode/markdown',
+            'xml': 'ace/mode/xml'
+        };
+
+        // Nếu tìm thấy đuôi file trong danh sách thì trả về mode đó
+        // Nếu không thì trả về mode text bình thường
+        return modeMap[ext] || 'ace/mode/text';
     }
 
     async runCode() {
         const path = this.model.activePath;
-        if (!path) return this.view.logTerminal("Chọn file để chạy!", "warn");
+        if (!path) return this.view.logTerminal("Vui lòng chọn file để chạy!", "warn");
 
-        // Xóa kết quả cũ (Minimalist)
+        // 1. Lấy nội dung code từ Editor
+        const session = this.model.fileSessions[path];
+        if (!session) return;
+        const code = session.getValue();
+
+        // 2. TỰ ĐỘNG NHẬN DIỆN NGÔN NGỮ QUA ĐUÔI FILE
+        const ext = path.split('.').pop().toLowerCase();
+
+        let lang = 'javascript'; // Mặc định là JS nếu không nhận diện được
+
+     // Trong hàm runCode()
+switch (ext) {
+    // --- NHÓM 1: C/C++ ---
+    case 'cpp': 
+    case 'c':
+    case 'h': 
+    case 'hpp':
+        lang = 'cpp'; 
+        break;
+
+    // --- NHÓM 2: JAVA ---
+    case 'java': 
+        lang = 'java'; 
+        break;
+
+    // --- NHÓM 3: PYTHON ---
+    case 'py': 
+        lang = 'python'; 
+        break;
+
+    // --- NHÓM 4: WEB/SCRIPT ---
+    case 'js': 
+        lang = 'javascript'; 
+        break;
+    case 'ts': 
+        lang = 'typescript'; // QUAN TRỌNG: Phải gửi là 'typescript'
+        break;
+    case 'php':
+        lang = 'php';
+        break;
+    case 'rb':
+        lang = 'ruby';
+        break;
+    case 'go':
+        lang = 'go';
+        break;
+    case 'cs':
+        lang = 'csharp';
+        break;
+
+    default: 
+        this.view.logTerminal(`Frontend chưa hỗ trợ chạy file .${ext}`, "warn");
+        return;
+}
+
+        // 3. Gửi về Server
         this.view.clearTerminal();
+        this.view.logTerminal(`Running (${lang})...`, "info");
 
-        const code = this.model.fileSessions[path].getValue();
-        const lang = path.endsWith('py') ? 'python' : 'javascript';
-
-        this.view.logTerminal("Running...", "info");
         try {
+            // Gửi request POST tới server
             const res = await fetch(`${this.model.BASE_URL}/run`, {
-                method: 'POST', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ language: lang, code })
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    language: lang, // Gửi đúng tên ngôn ngữ (python, cpp, javascript...)
+                    code: code
+                })
             });
+
             const data = await res.json();
-            this.view.clearTerminal(); // Xóa chữ Running
-            this.view.logTerminal(data.output || data.error, data.error ? 'error' : 'output');
-        } catch (e) { this.view.logTerminal("Lỗi kết nối", 'error'); }
+
+            // Xóa chữ Running...
+            this.view.clearTerminal();
+
+            // 4. Hiển thị kết quả
+            if (data.output) {
+                this.view.logTerminal(data.output, 'output');
+            }
+            if (data.error) {
+                this.view.logTerminal(data.error, 'error'); // Lỗi biên dịch/chạy
+            }
+
+        } catch (e) {
+            this.view.logTerminal("Lỗi kết nối tới Server Backend!", 'error');
+            console.error(e);
+        }
     }
 
     toggleTerminal() {
@@ -583,5 +765,26 @@ export class AppController {
             if (actExplorer) actExplorer.classList.remove('active');
         }
         if (this.view.editor) this.view.editor.resize();
+    }
+    // Trong class AppController
+
+    handleCloseTab(fileId) {
+        // 1. Gọi Model để xóa file khỏi danh sách đang mở
+        this.model.removeOpenTab(fileId);
+
+        // 2. Lấy danh sách tab còn lại
+        const remainingTabs = this.model.getOpenTabs();
+
+        if (remainingTabs.length > 0) {
+            // Nếu còn tab, active tab cuối cùng (hoặc tab bên cạnh)
+            const nextFile = remainingTabs[remainingTabs.length - 1];
+            this.view.renderMainEditor(nextFile);
+        } else {
+            // QUAN TRỌNG: Nếu hết tab, truyền NULL vào View
+            this.view.renderMainEditor(null);
+        }
+
+        // Render lại thanh tabbar
+        this.view.renderTabs(remainingTabs);
     }
 }

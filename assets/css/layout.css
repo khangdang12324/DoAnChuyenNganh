@@ -55,32 +55,46 @@
     grid-template-rows: 1fr;
     grid-template-areas: "activity explorer workbench gutter terminal";
     gap: 0;
-    height: calc(100vh - 48px - 22px);
+   height: calc(100vh - 48px - 25px) !important;
     min-height: 0;
 
 }
 
-/* STATUS BAR */
+/* --- STATUS BAR  --- */
 .status-bar {
-    height: 22px;
-    background-color: #008c8c;
-    /* Màu xanh đặc trưng VS Code */
+    position: fixed; 
+    bottom: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 25px; /* Tăng từ 22px lên 25px cho chữ không bị cắt */
+    
+    background-color: var(--accent-color); 
     color: #fff;
-    display: flex;
-    justify-content: space-between;
+    
+    display: flex; 
+    justify-content: space-between; 
     align-items: center;
-    padding: 0 10px;
+    
+    padding: 0 15px; /* Padding 2 bên rộng hơn chút */
     font-size: 12px;
     user-select: none;
-    position: fixed;
-    /* Cố định */
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    /* Chiếm hết chiều ngang */
     z-index: 9999;
+    box-sizing: border-box;
+    line-height: 1; /* Quan trọng: Để chữ căn giữa chuẩn */
 }
 
+.status-right { 
+    display: flex; 
+    gap: 20px; 
+    align-items: center;
+}
+
+.status-item { 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    cursor: default; /* Bỏ con trỏ tay để đỡ tưởng bấm được */
+}
 body.theme-light .status-bar {
     background-color: #008c8c;
     /* Light mode vẫn dùng xanh hoặc tím */
@@ -209,6 +223,8 @@ body.theme-light .status-bar {
 
         height: calc(100vh - 48px) !important;
         overflow: hidden;
+
+   
     }
 
     /* 2. HIỆN THANH KÉO (GUTTER) ĐỂ KÉO DỌC */
@@ -349,7 +365,9 @@ body.theme-light .status-bar {
         opacity: 1 !important;
     }
 
+    
 }
+
 .project-actions {
     display: flex;
     gap: 10px;
@@ -372,11 +390,20 @@ body.theme-light .status-bar {
     border-radius: 4px;
     color: #858585;
 }
-.action-btn:hover { color: #fff; background-color: rgba(255,255,255,0.1); }
-.delete-btn:hover { color: #ff6b6b; }
+
+.action-btn:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.delete-btn:hover {
+    color: #ff6b6b;
+}
+
 /* --- FIX LỖI Z-INDEX (Bảng Xóa phải cao hơn Bảng Dự án) --- */
 #deleteConfirmModal {
-    z-index: 99999 !important; /* Cao hơn 10000 */
+    z-index: 99999 !important;
+    /* Cao hơn 10000 */
 }
 
 /* Trong style.css */
@@ -391,4 +418,6 @@ body.theme-light .status-bar {
     width: 100%;
 }
 
-.hidden { display: none !important; }
+.hidden {
+    display: none !important;
+}

@@ -1,10 +1,7 @@
-/* ======================================== */
-/* TERMINAL STYLE (VS CODE THEME) */
-/* ======================================== */
 
 .terminal-panel {
     grid-area: terminal;
-    background-color: #1e1e1e; /* Nền đen VS Code */
+    background-color: #1e1e1e; 
     border-top: 1px solid #333;
     display: flex;
     flex-direction: column;
@@ -13,7 +10,7 @@
 }
 
 .term-toolbar {
-    height: 28px; /* Thanh tiêu đề nhỏ gọn */
+    height: 28px; 
     background-color: #252526;
     border-bottom: 1px solid #333;
     display: flex;

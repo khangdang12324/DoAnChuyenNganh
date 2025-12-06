@@ -4,158 +4,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>IDE Online</title>
-
+  <title>CodeSparkX</title>
 
   <link rel="stylesheet" href="assets/css/base.css" />
-
   <link rel="stylesheet" href="assets/css/layout.css" />
-
   <link rel="stylesheet" href="assets/css/components.css" />
-
   <link rel="stylesheet" href="assets/css/sidebar.css" />
   <link rel="stylesheet" href="assets/css/editor.css" />
   <link rel="stylesheet" href="assets/css/terminal.css" />
   <link rel="stylesheet" href="assets/css/modal.css" />
 
-  <link rel="stylesheet" href="assets/css/theme.css" />
   <link rel="stylesheet" href="assets/style.css" />
-  <!--- ACE Editor --->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ace.js"
-    integrity="sha512-T2otaV2NuxAJAOCoj8ijyy+eAAadZlpvdLmakrIGVFbBkthgIFqLTXd+T8Z+S+kf4V7Ib5+6f6r4D4IdS9Ey4A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.43.3/ext-language_tools.js"
-    integrity="sha512-1/ljEXsccQB1r2ZcAGw0D6ZrslR2yog7wbFxgCMIW4kkdLRdK2BqzfVHjDmPFFJOqDiOuEN6GpxVijhYfWbtWg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-language_tools.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 </head>
-
-<!--JSZip-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"
-  integrity="sha512-XMVd28F1oH/O71fzwBnV7HucLxVwtxf26XV8P4wPk26EDxuGZ91N8bsOttmnomcCD3CS5ZMRL50H0GgOHvegtg=="
-  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <body class="theme-dark">
   <header class="topbar">
-
     <div class="top-left">
-
       <a class="logo" href="#">
-        <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081010/Logo-mini_p1obee.png"
-          alt="IDE Online Logo" class="brand-logo" />
+        <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081010/Logo-mini_p1obee.png" alt="Logo"
+          class="brand-logo" />
       </a>
-
-      <ul class="lang-popover" role="listbox">
-        <li class="lang-item is-active" data-lang="python">
-          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764080590/python.jpg" class="lang-icon" alt="">
-          <span>Python</span>
-        </li>
-        <li class="lang-item" data-lang="javascript">
-          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081008/js_sxfpwa.png" class="lang-icon"
-            alt="">
-          <span>JavaScript</span>
-        </li>
-        <li class="lang-item" data-lang="cpp">
-          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081009/cpp_ud97qo.png" class="lang-icon"
-            alt="">
-          <span>C++</span>
-        </li>
-        <li class="lang-item" data-lang="java">
-          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081009/java_jjd57n.png" class="lang-icon"
-            alt="">
-          <span>Java</span>
-        </li>
-      </ul>
-    </div>
     </div>
 
     <div class="top-center">
       <button type="button" id="runBtn" class="btn-run-accent" title="Chạy mã nguồn">
         <span class="btn-icon">▶</span> Chạy
       </button>
-
-      <div class="save-menu-container">
-        <button id="saveBtnTrigger" class="icon-btn" title="Lưu dự án">💾</button>
-
-        <ul id="saveMenuPopover" class="save-popover hidden">
-          <li id="saveFileBtn">
-            <span>Tải file hiện tại</span>
-          </li>
-          <li id="saveZipBtn">
-            <span>Tải toàn bộ dự án(.zip)</span>
-        </ul>
-      </div>
-
-      <!-- <button class="icon-btn" title="Cài đặt">⚙</button> -->
+      <!-- <div class="save-menu-container">
+                <button type="button" id="saveBtn" class="icon-btn" title="Lưu dự án">💾</button>
+            </div> -->
     </div>
 
     <div class="top-right">
-      <label class="switch">
-        <input id="autoRunToggle" type="checkbox" />
-        <span class="slider"></span>
-        <span class="switch-label">Tối/Sáng</span>
-      </label>
-      <button class="btn-dark-pill">🔗 Chia sẻ</button>
+      <!-- <label class="switch">
+                <input id="themeToggle" type="checkbox" />
+                <span class="slider"></span>
+            </label> -->
+      <!-- <button class="btn-dark-pill">🔗 Chia sẻ</button> -->
       <button id="signinBtn" class="btn-accent-pill">Đăng nhập</button>
-      <span id="userDisplay" style="font-size: 13px; font-weight: bold; display: none;"></span>
+      <span id="userDisplay" style="font-size: 13px; font-weight: bold; display: none; margin-right: 10px;"></span>
       <button id="logoutBtn" class="btn-dark-pill" style="display: none;">Đăng xuất</button>
     </div>
-
   </header>
-
 
   <main class="layout">
     <aside class="activity-bar">
       <div class="activity-top">
-        <div class="activity-item active" title="Explorer (Ctrl+Shift+E)" id="actExplorer">
+        <div class="activity-item active" id="actExplorer" title="Explorer">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 3h18v18H3zM9 3v18" />
           </svg>
         </div>
-        <div class="activity-item" id="actProject" title="Project Manager">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-            <line x1="9" y1="13" x2="15" y2="13"></line>
-            <line x1="12" y1="10" x2="12" y2="16"></line>
-          </svg>
-        </div>
-        <div class="activity-item" title="Search">
+        <div class="activity-item" id="actProject" title="Danh sách Dự án">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8" />
-            <path d="m21 21-4.3-4.3" />
-          </svg>
-        </div>
-        <div class="activity-item" title="Source Control">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="18" cy="18" r="3" />
-            <circle cx="6" cy="6" r="3" />
-            <path d="M6 21V9a9 9 0 0 0 9 9" />
+            <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
+            <line x1="9" y1="13" x2="15" y2="13" />
+            <line x1="12" y1="10" x2="12" y2="16" />
           </svg>
         </div>
       </div>
-
       <div class="activity-bottom">
-        <div class="activity-item" title="Settings" id="actSettings">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <div class="activity-item" title="Settings"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
             <circle cx="12" cy="12" r="3" />
             <path
               d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
-          </svg>
-        </div>
+          </svg></div>
       </div>
     </aside>
-    <!-- Editor -->
+
     <aside class="file-explorer">
-
       <div class="file-explorer-header">
-        <span>CODE SPARKX</span>
+        <span>TỆP TIN</span>
         <div class="explorer-actions">
-
-          <button id="newFileBtn" class="icon-btn" title="Thêm tệp tin">📄</button>
-          <button id="newFolderBtn" class="icon-btn" title="Thêm thư mục">📁</button>
-          <button id="refreshBtn" class="icon-btn" title="Làm mới">🔄</button>
-          <button id="collapseBtn" class="icon-btn" title="Thu gọn tất cả">-</button>
+          <button id="newFileBtn" class="icon-btn" title="New File">📄</button>
+          <button id="newFolderBtn" class="icon-btn" title="New Folder">📁</button>
+          <button id="refreshBtn" class="icon-btn" title="Refresh">🔄</button>
+          <button id="collapseBtn" class="icon-btn" title="Collapse">-</button>
         </div>
       </div>
       <ul id="fileTree" class="file-tree-list"></ul>
@@ -163,41 +92,102 @@
 
     <section class="workbench">
       <div class="breadcrumbs" id="breadcrumbs">
-        <span class="breadcrumb-item">k-ide</span>
-        <span class="breadcrumb-separator">›</span>
-        <span class="breadcrumb-item active" id="breadcrumbFile">main.py</span>
+        <span class="breadcrumb-item" id="breadcrumbProjectName">CodeSparkX</span>
+
+        <span class="breadcrumb-separator" id="crumbSep">›</span>
+        <span class="breadcrumb-item active" id="breadcrumbFile"></span>
       </div>
-
+      <div id="welcomeScreen" class="welcome-screen hidden">
+        <div class="welcome-content">
+          <h1>CodeSparkX</h1>
+          <p>Start coding now...</p>
+        </div>
+      </div>
       <div id="editor" class="editor"></div>
+      <div id="main-editor-area" class="editor-area" style="position: relative; height: 100%; width: 100%;">
 
+        <div id="empty-state" class="empty-state">
+          <img src="https://res.cloudinary.com/dqkysbzie/image/upload/v1764081010/Logo_CodeSparkX_Khang_mlfjxp.png"
+            alt="Code SparkX" class="logo-dim">
+        </div>
+
+        <div id="ace-editor-container" class="editor-instance hidden"></div>
+
+      </div>
     </section>
-    <!-- Thanh kéo chia 2 pane -->
-    <div class="gutter" id="gutterX" aria-hidden="true"></div>
 
-    <!-- Preview -->
+    <div class="gutter" id="gutterX"></div>
+
     <section class="terminal-panel">
       <div class="term-toolbar">
         <div class="term-title">TERMINAL</div>
       </div>
       <div id="terminal" class="terminal-body"></div>
-
     </section>
-  <ul id="contextMenu" class="context-menu hidden">
-        <li id="ctxRename">✏️ Đổi tên <span style="margin-left:auto;color:#666;font-size:11px">F2</span></li>
-        <li id="ctxCut">✂️ Cắt <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+X</span></li>
-        <li id="ctxCopy">📄 Sao chép <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+C</span></li>
-        <li id="ctxPaste">📋 Dán <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+V</span></li>
-        <li class="separator"></li>
-        <li id="ctxDownload">⬇️ Tải về</li>
-        <li class="separator"></li>
-        <li id="ctxDelete" style="color: #ff6b6b;">🗑️ Xóa <span style="margin-left:auto;color:#ff6b6b;font-size:11px">Del</span></li>
+
+    <ul id="contextMenu" class="context-menu hidden">
+      <li id="ctxRename">✏️ Đổi tên <span style="margin-left:auto;color:#666;font-size:11px">F2</span></li>
+      <li id="ctxCut">✂️ Cắt <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+X</span></li>
+      <li id="ctxCopy">📄 Sao chép <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+C</span></li>
+      <li id="ctxPaste">📋 Dán <span style="margin-left:auto;color:#666;font-size:11px">Ctrl+V</span></li>
+      <li class="separator"></li>
+      <li id="ctxDownload">⬇️ Tải về</li>
+      <li class="separator"></li>
+      <li id="ctxDelete" style="color: #ff6b6b;">🗑️ Xóa <span
+          style="margin-left:auto;color:#ff6b6b;font-size:11px">Del</span></li>
     </ul>
+
+
+    <div id="authModal" class="modal-overlay hidden">
+      <div class="modal-content" style="width: 350px;">
+        <h3 id="authTitle">Đăng nhập</h3>
+        <div class="form-group"><label>Tên đăng nhập</label><input type="text" id="authUsername" class="modal-input">
+        </div>
+        <div class="form-group"><label>Mật khẩu</label><input type="password" id="authPassword" class="modal-input">
+        </div>
+        <div id="authMessage" class="auth-message hidden"></div>
+        <div class="modal-actions">
+          <a href="#" id="switchAuthMode" style="font-size:13px;margin-right:auto;">Chưa có TK?</a>
+          <button id="authCancelBtn" class="btn modal-btn-cancel">Hủy</button>
+          <button id="authSubmitBtn" class="btn modal-btn-create">Đăng nhập</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="projectManagerModal" class="modal-overlay hidden">
+      <div class="modal-content project-modal-box">
+        <div class="pm-header">
+          <h3>Danh sách Dự án</h3>
+          <button id="pmNewProjectBtn" class="btn modal-btn-create">+ Dự án mới</button>
+        </div>
+        <div id="projectListContainer" class="pm-body">
+          <p class="empty-msg">Đang tải...</p>
+        </div>
+        <div class="pm-footer">
+          <button id="pmLogoutBtn" class="btn btn-danger-outline">Đăng xuất</button>
+          <button id="pmCloseBtn" class="btn modal-btn-cancel">Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="createProjectModal" class="modal-overlay hidden">
+      <div class="modal-content" style="width: 380px;">
+        <h3 style="margin-top:0;">Tạo dự án mới</h3>
+        <div class="form-group">
+          <label>Tên dự án</label>
+          <input type="text" id="newProjectInput" class="modal-input" placeholder="Ví dụ: Bài tập lớn...">
+        </div>
+        <div class="modal-actions">
+          <button id="btnCancelCreateProj" class="btn modal-btn-cancel">Hủy</button>
+          <button id="btnConfirmCreateProj" class="btn modal-btn-create">Tạo ngay</button>
+        </div>
+      </div>
+    </div>
 
     <div id="deleteConfirmModal" class="modal-overlay hidden">
       <div class="confirm-modal-content" style="border: 1px solid #ff6b6b;">
-        <h3 style="margin-top: 0; font-size: 16px; color: #ff6b6b;">Xác nhận xóa</h3>
-        <p id="deleteConfirmText" style="font-size: 14px; margin: 15px 0;">Bạn có chắc muốn xóa file này?</p>
-
+        <h3 style="margin-top: 0; color: #ff6b6b;">Xác nhận xóa</h3>
+        <p id="deleteConfirmText">...</p>
         <div class="confirm-actions">
           <button id="btnCancelDelete" class="btn btn-secondary">Hủy</button>
           <button id="btnConfirmDelete" class="btn btn-primary" style="background-color: #ff6b6b;">Xóa vĩnh
@@ -205,36 +195,23 @@
         </div>
       </div>
     </div>
-    <!-- // Authentication Modal -->
-    <div id="authModal" class="modal-overlay hidden">
-      <div class="modal-content" style="width: 350px;">
-        <h3 id="authTitle">Đăng nhập</h3>
 
-        <div class="form-group">
-          <label>Tên đăng nhập</label>
-          <input type="text" id="authUsername" class="modal-input" placeholder="Nhập username...">
-        </div>
-        <div class="form-group">
-          <label>Mật khẩu</label>
-          <input type="password" id="authPassword" class="modal-input" placeholder="Nhập password...">
-        </div>
-
-        <div id="authMessage" class="auth-message hidden"></div>
-
-        <div class="modal-actions" style="justify-content: space-between; align-items: center;">
-          <a href="#" id="switchAuthMode" style="font-size: 13px; color: #007acc;">Chưa có tài khoản?</a>
-          <div>
-            <button id="authCancelBtn" class="btn modal-btn-cancel">Hủy</button>
-            <button id="authSubmitBtn" class="btn modal-btn-create">Đăng nhập</button>
-          </div>
+    <div id="moveConfirmModal" class="modal-overlay hidden">
+      <div class="confirm-modal-content">
+        <h3 style="margin-top:0;">Di chuyển</h3>
+        <p id="moveConfirmText">...</p>
+        <label class="confirm-checkbox-label"><input type="checkbox" id="dontAskMoveAgain"> Đừng hỏi lại tôi</label>
+        <div class="confirm-actions">
+          <button id="btnCancelMove" class="btn btn-secondary">Hủy</button>
+          <button id="btnConfirmMove" class="btn btn-primary">Di chuyển</button>
         </div>
       </div>
     </div>
 
     <div id="logoutModal" class="modal-overlay hidden">
       <div class="confirm-modal-content" style="border: 1px solid #ff6b6b;">
-        <h3 style="margin-top: 0; font-size: 16px; color: #ff6b6b;">Đăng xuất</h3>
-        <p style="font-size: 14px; margin: 15px 0;">Bạn có chắc chắn muốn đăng xuất?</p>
+        <h3 style="margin-top: 0; color: #ff6b6b;">Đăng xuất</h3>
+        <p>Bạn có chắc muốn đăng xuất?</p>
         <div class="confirm-actions">
           <button id="btnCancelLogout" class="btn btn-secondary">Hủy</button>
           <button id="btnConfirmLogout" class="btn btn-primary" style="background-color: #ff6b6b;">Đăng xuất</button>
@@ -242,86 +219,19 @@
       </div>
     </div>
 
-
-    <!--Exit-->
-    <div id="logoutModal" class="modal-overlay hidden">
-      <div class="confirm-modal-content" style="border: 1px solid #ff6b6b;">
-        <h3 style="margin-top: 0; font-size: 16px; color: #ff6b6b;">Đăng xuất</h3>
-        <p style="font-size: 14px; margin: 15px 0;">Bạn có chắc chắn muốn đăng xuất khỏi hệ thống?</p>
-
-        <div class="confirm-actions">
-          <button id="btnCancelLogout" class="btn btn-secondary">Hủy</button>
-          <button id="btnConfirmLogout" class="btn btn-primary" style="background-color: #ff6b6b;">Đăng xuất</button>
-        </div>
-      </div>
-    </div>
-    <!-- Quan ly du an  -->
-    <div id="projectManagerModal" class="modal-overlay hidden">
-      <div class="modal-content" style="width: 500px; height: 400px; display: flex; flex-direction: column;">
-
-        <div
-          style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px; border-bottom: 1px solid #444; padding-bottom: 10px;">
-          <h3 style="margin:0;">Danh sách Dự án</h3>
-          <div>
-            <button id="pmNewProjectBtn" class="btn modal-btn-create">+ Dự án mới</button>
-          </div>
-        </div>
-
-        <div id="projectListContainer" style="flex: 1; overflow-y: auto; padding-right: 5px;">
-          <p style="text-align:center; color:#888;">Đang tải...</p>
-        </div>
-
-        <div class="modal-actions" style="border-top: 1px solid #444; padding-top: 15px;">
-          <button id="pmLogoutBtn" class="btn"
-            style="background: transparent; color: #ff6b6b; border: 1px solid #ff6b6b; margin-right: auto;">Đăng
-            xuất</button>
-          <button id="pmCloseBtn" class="btn modal-btn-cancel">Đóng</button>
-        </div>
-      </div>
-    </div>
-    <!-- khung tao/xoa du an moi -->
-    <div id="createProjectModal" class="modal-overlay hidden">
-        <div class="modal-content" style="width: 380px;">
-            <h3>Tạo dự án mới</h3>
-            <div class="form-group">
-                <label>Tên dự án</label>
-                <input type="text" id="newProjectInput" class="modal-input">
-            </div>
-            <div class="modal-actions">
-                <button id="btnCancelCreateProj" class="btn modal-btn-cancel">Hủy</button>
-                <button id="btnConfirmCreateProj" class="btn modal-btn-create">Tạo ngay</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="createProjectModal" class="modal-overlay hidden">
-        <div class="modal-content" style="width: 380px;">
-            <h3 style="margin-top:0;">Tạo dự án mới</h3>
-            <div class="form-group">
-                <label>Tên dự án</label>
-                <input type="text" id="newProjectInput" class="modal-input" placeholder="Ví dụ: Bài tập lớn...">
-            </div>
-            <div class="modal-actions">
-                <button id="btnCancelCreateProj" class="btn modal-btn-cancel">Hủy</button>
-                <button id="btnConfirmCreateProj" class="btn modal-btn-create">Tạo ngay</button>
-            </div>
-        </div>
-    </div>
-
-    
   </main>
+
   <footer class="status-bar">
     <div class="status-left">
-      <!-- <span class="status-item"><i class="icon">code-branch</i> main*</span> -->
-      <span class="status-item" id="statusIssues">0 errors</span>
+      <span class="status-item" id="statusIssues">✓ 0 errors</span>
     </div>
     <div class="status-right">
       <span class="status-item" id="statusCursor">Ln 1, Col 1</span>
       <span class="status-item">UTF-8</span>
       <span class="status-item" id="statusLang">Python</span>
-      <!-- <span class="status-item"><i class="icon">bell</i></span> -->
     </div>
   </footer>
+
   <script type="module" src="src/main.js"></script>
 </body>
 

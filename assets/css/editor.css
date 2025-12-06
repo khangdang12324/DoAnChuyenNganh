@@ -1,85 +1,113 @@
+/* =================================================================
+   EDITOR.CSS - FIX LỖI MẤT KHUNG & TĂNG ĐỘ SÁNG CHỮ
+   ================================================================= */
+
+/* 1. KHUNG CHÍNH (WORKBENCH) */
 .workbench {
-    grid-area: workbench; min-width: 0;
-    display: flex; flex-direction: column; min-height: 0;
-    background: #1e1e1e; border-radius: 8px;
+    grid-area: workbench;
+    display: flex; flex-direction: column;
+    min-height: 0; height: 100%; 
+    background-color: #1e1e1e !important; /* Nền xám đen */
+    overflow: hidden; position: relative;
 }
-.editor { position: relative; flex: 1; min-height: 0; background: #0f1115; }
 
-.gutter {
-    grid-area: gutter; background: #2b2f39; cursor: col-resize;
-    box-shadow: inset -1px 0 0 #000, inset 1px 0 0 #000;
-}
-.gutter:hover { background: #3a3a3a; }
-
-/* Tabbar (Code cũ - nếu bạn còn giữ) */
+/* 2. THANH TAB (FILE TABBAR) */
 .file-tabbar {
-    height: 40px; background: #1e1e1e; color: #ddd;
-    display: flex; align-items: center;
-    border-bottom: 1px solid #2a2a2a; padding: 0 8px; gap: 8px;
+    height: 35px;
+    background-color: #252526 !important; 
+    border-bottom: 1px solid #2b2b2b;
+    display: flex; align-items: center; padding: 0 10px; gap: 2px;
+    flex-shrink: 0;
 }
-.file-tabs { display: flex; align-items: center; gap: 6px; flex: 1; overflow-x: auto; }
+
+/* Style Tab - Đã tăng độ sáng chữ */
 .file-tab {
-    display: inline-flex; align-items: center; gap: 8px;
-    height: 28px; padding: 0 10px;
-    border: 1px solid #3a3a3a; border-radius: 4px;
-    background: #2a2a2a; color: #ddd;
-    cursor: pointer; user-select: none;
+    height: 28px; padding: 0 12px; margin-right: 1px;
+    background-color: #2d2d2d; 
+    color: #cccccc; /* Sáng hơn (cũ là #969696) */
+    border-radius: 3px 3px 0 0; 
+    cursor: pointer; display: flex; align-items: center; gap: 8px;
+    font-size: 13px; user-select: none;
 }
-.file-tab:hover { background: #333; }
+.file-tab:hover { background-color: #3a3a3a; color: #fff; }
+
+/* Tab Active - Sáng rõ */
 .file-tab.active {
-    background: #008c8c; border-color: #138d83; color: #fff;
-}
-/* --- MÀN HÌNH CHÀO MỪNG (WELCOME SCREEN) --- */
-.welcome-screen {
-    flex: 1;
-    background-color: #1e1e1e;
-    color: #cccccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 40px;
-    overflow-y: auto;
+    background-color: #1e1e1e !important; 
+    color: #ffffff !important; /* Trắng tinh */
+    font-weight: 600; /* Chữ đậm hơn chút */
+    border-top: 2px solid #008c8c; 
 }
 
-.welcome-content {
-    max-width: 600px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* Chia 2 cột: Start | Recent */
-    gap: 40px;
+/* 3. KHUNG CHỨA EDITOR (FULL MÀN HÌNH) */
+.editor-area {
+    position: relative; flex: 1; width: 100%; height: 100%;
+    background-color: #1e1e1e !important;
+    overflow: hidden;
 }
 
-/* Logo & Title (Chiếm hết chiều ngang) */
-.welcome-logo, .welcome-content h1, .welcome-content .subtitle {
-    grid-column: span 2;
+/* Instance Ace Editor - Fix lỗi hiển thị */
+.editor-instance, #ace-editor-container {
+    position: absolute !important;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100% !important; height: 100% !important;
 }
 
-.welcome-logo img { width: 64px; height: 64px; opacity: 0.8; margin-bottom: 10px; }
-.welcome-content h1 { font-size: 24px; margin: 0; font-weight: 500; color: #ffffff; }
-.welcome-content .subtitle { font-size: 16px; color: #666; margin-bottom: 30px; }
-
-/* Cột Start & Recent */
-.welcome-content h3 { font-size: 18px; font-weight: 400; margin-bottom: 10px; color: #ffffff; }
-.welcome-content ul { list-style: none; padding: 0; }
-.welcome-content li { margin-bottom: 8px; }
-
-/* Nút bấm dạng link */
-.link-btn {
-    background: none; border: none;
-    color: #3794ff; cursor: pointer;
-    font-size: 14px; padding: 0;
-    text-align: left; display: flex; align-items: center; gap: 8px;
+/* 4. MÀN HÌNH CHỜ */
+.welcome-screen, .empty-state {
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #1e1e1e !important;
+    color: #888888; /* Sáng hơn (cũ là #666) */
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    z-index: 10;
 }
-.link-btn:hover { text-decoration: underline; }
-.link-btn .icon { width: 20px; text-align: center; color: #cccccc; }
+.logo-dim { width: 100px; opacity: 0.5; filter: grayscale(100%); margin-bottom: 20px; }
 
-/* Recent List Items */
-.recent-item {
-    cursor: pointer; padding: 5px 0; font-size: 13px; color: #3794ff;
+/* 5. OVERRIDE ACE EDITOR (MÀU CHỮ SÁNG & RÕ) */
+/* Đoạn này quan trọng nhất để code không bị nhợt nhạt */
+
+.ace_editor, 
+.ace-monokai, 
+.ace-monokai .ace_gutter, 
+.ace-monokai .ace_scroller, 
+.ace-monokai .ace_content, 
+.ace-monokai .ace_gutter-layer {
+    background-color: #1e1e1e !important; 
+    /* Đổi màu chữ từ xám (#d4d4d4) sang TRẮNG SÁNG (#f8f8f2) */
+    color: #f8f8f2 !important; 
 }
-.recent-item:hover { color: #ffffff; }
-.recent-item span { display: block; color: #888; font-size: 11px; }
 
-/* Helper để ẩn hiện Editor */
-.editor.hidden { display: none !important; }
-.welcome-screen.hidden { display: none !important; }
+/* Fix màu các thành phần code cho tươi hơn (Optional) */
+.ace_keyword { color: #f92672 !important; } /* Hồng đậm */
+.ace_string { color: #e6db74 !important; }  /* Vàng chanh */
+.ace_variable { color: #fd971f !important; } /* Cam */
+.ace_function { color: #a6e22e !important; } /* Xanh lá */
+
+/* Dòng đang chọn */
+.ace-monokai .ace_marker-layer .ace_active-line {
+    background-color: #282828 !important;
+}
+
+/* Ẩn viền cột số dòng */
+.ace-monokai .ace_gutter-active-line {
+    background-color: transparent !important;
+}
+
+/* Màu con trỏ chuột */
+.ace-monokai .ace_cursor {
+    color: #f8f8f0 !important; /* Trắng sáng */
+    border-left: 2px solid #f8f8f0 !important;
+}
+
+/* Số dòng (Gutter text) */
+.ace-monokai .ace_gutter {
+    background-color: #1e1e1e !important;
+    border-right: 1px solid #333; 
+    color: #606060 !important; /* Số dòng xám vừa phải */
+}
+.ace-monokai .ace_gutter-active-line {
+    color: #ffffff !important; /* Số dòng đang chọn màu trắng */
+}
+
+/* Utility */
+.hidden { display: none !important; }

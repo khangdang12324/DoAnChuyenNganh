@@ -1,31 +1,32 @@
 :root {
-    --left: 50%;
+    /* --- MÀU BẠN THÍCH (XANH THAN ĐẬM) --- */
+    --bg-topbar: #111827; 
+    --bg-sidebar: #111827; /* Sidebar dùng chung màu với Topbar */
+    
+    /* --- MÀU EDITOR & TERMINAL (Đen sâu để tách biệt) --- */
+    --bg-editor: #0f1115; 
+    
+    /* Màu chữ & Viền */
+    --text-primary: #e5e7eb;
+    --text-muted: #9ca3af;
+    --border-color: #1f2937; /* Viền xanh nhẹ */
+    
+    /* Màu Accent (Giữ nguyên) */
     --accent-color: #008c8c;
     --accent-hover: #007a7a;
-    --accent-active: #006565;
 
-    --bg-top: #1f2937;
-    --fg-top: #e5e7eb;
-    --bg-topbar: #111827;
-    --fg-topbar: #e5e7eb;
-    --border-topbar: #1f2937;
+    /* Nút bấm (Giữ nguyên) */
     --btn-dark: #1f2937;
     --btn-dark-border: #374151;
     --btn-dark-hover: #2a3342;
-
-    --run-green: #22c55e;
-    --run-green-hover: #16a34a;
-
-    --dark-1: #111827;
-    --dark-2: #1f2937;
-    --dark-br: #374151;
 }
 
 body {
     font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    margin: 0; padding: 0; height: 100vh;
+    background-color: var(--bg-editor); /* Nền chính đen */
+    color: var(--text-primary);
+    display: flex; flex-direction: column;
 }
+
+.hidden { display: none !important; }

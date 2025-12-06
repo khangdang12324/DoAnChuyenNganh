@@ -330,4 +330,8 @@ export class ProjectModel {
         this.saveProjectToCloud();
         return { success: true };
     }
+    // --- KIỂM TRA XEM DỰ ÁN CÓ RỖNG KHÔNG ---
+    isEmpty() {
+        return Object.keys(this.vfs).length === 0;
+    }
 }

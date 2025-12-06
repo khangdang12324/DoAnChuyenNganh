@@ -1,1232 +1,144 @@
+/* =================================================================
+   FILE STYLE.CSS: TRANG TRÍ GIAO DIỆN (THEME & UI)
+   ================================================================= */
+
 :root {
-    --left: 50%;
-    --accent-color: #008c8c;
-    --accent-hover: #007a7a;
-    --accent-active: #006565;
-
-    --bg-top: #1f2937;
-    --fg-top: #e5e7eb;
-    --bg-topbar: #111827;
-    --fg-topbar: #e5e7eb;
-    --border-topbar: #1f2937;
-    --btn-dark: #1f2937;
-    --btn-dark-border: #374151;
-    --btn-dark-hover: #2a3342;
-
-    --run-green: #22c55e;
-    --run-green-hover: #16a34a;
-
-    --dark-1: #111827;
-    --dark-2: #1f2937;
-    --dark-br: #374151;
+    /* --- MÀU GỐC "CŨ MÀ ĐẸP" (#1e1e1e) --- */
+    --bg-main: #1e1e1e;       /* Nền chính */
+    --bg-panel: #252526;      /* Nền tiêu đề/Panel */
+    --border-color: #333333;  /* Viền tối */
+    --text-main: #cccccc;
+    --accent: #008c8c;        /* Màu xanh ngọc */
+    
+    /* --- NÚT BẤM --- */
+    --btn-bg: #2d2d2d;
+    --btn-border: #454545;
+    --btn-hover: #3a3a3a;
 }
 
+/* 1. CẤU HÌNH CHUNG */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-
-
-
-.btn-dark-pill {
-    height: 36px;
-    padding: 0 12px;
-    background: var(--btn-dark);
-    color: #e5e7eb;
-    border: 1px solid var(--btn-dark-border);
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.btn-dark-pill:hover {
-    background: var(--btn-dark-hover);
-}
-
-.btn-accent-pill {
-    height: 36px;
-    padding: 0 14px;
-    background: var(--accent-color);
-    color: #fff;
-    border: 1px solid var(--accent-color);
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.btn-accent-pill:hover {
-    background: var(--accent-hover);
-    border-color: var(--accent-hover);
-}
-
-/*  Dark Mode */
-.switch {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    user-select: none;
-}
-
-.switch input {
-    display: none;
-}
-
-.slider {
-    position: relative;
-    width: 48px;
-    height: 26px;
-    background: #374151;
-    border-radius: 999px;
-    box-shadow: inset 0 1px 2px rgba(0, 0, 0, .35);
-    transition: background .2s;
-}
-
-.slider::before {
-    content: "";
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    width: 20px;
-    height: 20px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
-    transition: transform .22s;
-}
-
-.switch input:checked+.slider {
-    background: var(--accent-color);
-}
-
-.switch input:checked+.slider::before {
-    transform: translateX(22px);
-    box-shadow: 0 0 0 2px rgba(0, 140, 140, .25);
-}
-
-.switch-label {
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 13px;
-    opacity: .9;
 }
 
-
-.actions {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+/* 2. ĐỒNG BỘ MÀU NỀN (Làm phẳng giao diện) */
+.workbench, .editor, .editor-area, 
+.terminal-panel, .terminal-body, 
+.sidebar, .file-explorer {
+    background-color: var(--bg-main) !important;
+    color: var(--text-main);
+    border-color: var(--border-color);
 }
 
-/* Buttons */
-
-.btn-run-accent {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    height: 36px;
-    padding: 0 16px;
-    background: var(--accent-color);
-    color: #fff;
-    border: 1px solid var(--accent-color);
-
-    cursor: pointer;
-    font-weight: 600;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, .3), inset 0 0 0 1px rgba(255, 255, 255, .06);
-    border-radius: 10px;
-    ;
+/* 3. CÁC THANH TIÊU ĐỀ (HEADER) */
+.file-explorer-header, .term-toolbar, .file-tabbar {
+    height: 35px;
+    background-color: var(--bg-panel) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    display: flex; align-items: center; padding: 0 10px;
+    font-weight: bold; color: #bbb;
 }
 
-.lang-select.is-open .lang-popover {
-    display: block;
-}
-
-.btn-run-accent:hover {
-    background: #007a7a;
-    border-color: #007a7a;
-}
-
-.btn-run-accent:active {
-    background: #006565;
-    border-color: #006565;
-}
-
-.btn-run-accent .btn-icon {
-    font-size: 14px;
-    line-height: 1;
-}
-
-
-.workbench {
-    grid-area: workbench;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    background: #0f1115;
-}
-
-.editor {
-    position: relative;
-    flex: 1;
-    min-height: 0;
-    background: #0f1115;
-}
-
-.gutter {
-    grid-area: gutter;
-    background: #2b2f39;
-    cursor: col-resize;
-    box-shadow: inset -1px 0 0 #000, inset 1px 0 0 #000;
-}
-
-.terminal-panel {
-    grid-area: terminal;
-    background: #0f1115;
-    color: #e5e7eb;
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid #222;
-}
-
-.term-toolbar {
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 12px;
-    border-bottom: 1px solid #222;
-    background: #0c0e13;
-}
-
-
-.terminal-body {
-    flex: 1;
-    overflow: auto;
-    font-family: Consolas, "Courier New", monospace;
-    font-size: 14px;
-    line-height: 1.45;
-    padding: 10px;
-    background: #0f1115;
-    color: #e5e7eb;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
-
-.term-line {
-    color: #cfe8ff;
-    display: block;
-}
-
-.term-line.info {
-    color: #ffd966;
-    display: block;
-}
-
-.term-line.error {
-    color: #ff6b6b;
-}
-
-.term-line.output {
-    color: #cfe8ff;
-    display: block;
-}
-
-/*Mobile Responsive */
-
-@media (max-width: 992px) {
-    .layout {
-
-        grid-template-areas:
-            "workbench"
-            "gutter"
-            "terminal";
-        grid-template-columns: 1fr;
-        grid-template-rows: 50vh 10px 1fr;
-    }
-
-    :root {
-        --left: 100%;
-    }
-}
-
-.gutter {
-    grid-area: gutter;
-    background: #2a2a2a;
-    cursor: col-resize;
-}
-
-.gutter:hover {
-    background: #3a3a3a;
-}
-
-
-.term-toolbar {
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 12px;
-    border-bottom: 1px solid #222;
-    background: #151515;
-}
-
-.term-title {
-    font-size: 12px;
-    letter-spacing: .12em;
-    opacity: 0.8;
-}
-
-.icon-btn {
-    background: var(--btn-dark);
-    border: 1px solid var(--btn-dark-border);
-    color: #e5e7eb;
-    border-radius: 10px;
-    height: 36px;
-    padding: 0 10px;
-    cursor: pointer;
-}
-
-.icon-btn:hover {
-    background: var(--btn-dark-hover);
-}
-
-
-.sidebar {
-
-    background-color: #f4f4f4;
-    border-right: 1px solid #ddd;
-    padding: 12px;
-    overflow: auto;
-}
-
-.sidebar-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.file-tree {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.file-tree li {
-    padding: 8px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-.file-tree li:hover {
-    background: #f0f0f0;
-}
-
-.file-tree li.active {
-    background: #008c8c;
-    color: #fff;
-    font-weight: bold;
-}
-
-.workbench {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    background: #1e1e1e;
-    /* giống dark editor */
-    border-radius: 8px;
-}
-
-.editor {
-    position: relative;
-    flex: 1;
-    min-height: 0;
-}
-
-.editor-wrapper {
-    position: absolute;
-    inset: 0;
-    display: none;
-}
-
-.editor-wrapper.active {
-    display: block;
-}
-
-.tabs {
-    display: flex;
-    gap: 4px;
-    border-bottom: 1px solid #ddd;
-    padding: 4px;
-}
-
-.tab {
-    padding: 8px 12px;
-    cursor: pointer;
-    background: #f7f7f7;
-    border: 1px solid #ddd;
-    border-bottom: none;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-
-.tab.active {
-    background: #fff;
-    font-weight: bold;
-}
-
-body.theme-dark {
-    background-color: #0f1115;
-    color: #e5e7eb;
-}
-
-.console {
-    border-top: 1px solid #ddd;
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-}
-
-.console-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
-    border-bottom: 1px solid #ddd;
-}
-
-.console-body {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    background: #fff;
-    color: #111;
-    padding: 10px;
-    border-radius: 0 0 8px 8px;
-    font-family: Consolas, " Courier New", monospace;
-    font-size: 14px;
-    line-height: 1.45;
-}
-
-.console-body .log {
-    color: #cfe8ff;
-}
-
-.console-body .error {
-    color: #ff6b6b;
-}
-
-.console-body .warn {
-    color: #ffd966;
-}
-
-.right-panel {
-    background: #fff;
-    border-left: 1px solid #ddd;
-    border-radius: 8px;
-    display: grid;
-    grid-template-rows: 40px 1fr;
-    min-height: 0;
-    overflow: hidden;
-}
-
-.preview-header {
-    padding: 8px 12px;
-    border-bottom: 1px solid #ddd;
-    font-weight: bold;
-    color: #333;
-}
-
-.preview {
-    border: none;
-    width: 100%;
-    height: 100%;
-    background: #fff;
-}
-
-/* LANGUAGE SELECTOR */
-.lang {
-    position: relative;
-}
-
-.lang-select {
-    position: relative;
-}
-
-
-
-.lang-trigger {
-    display: flex;
-    align-items: center;
-
-    height: 40px;
-
-    padding: 0 14px;
-    background: var(--dark-1);
-    color: var(--fg-topbar);
-    border: 1px solid var(--dark-br);
-    border-radius: 10px;
-    cursor: pointer;
-    box-shadow: inset 0 0 0 1px #30363d
-}
-
-.lang-trigger:hover {
-    background: var(--dark-2);
-}
-
-.lang-icon {
-    height: 25px;
-    width: 25px;
-
-    display: block;
-
-}
-
-.lang-text {
-
-    font-weight: 600;
-    margin-left: 10px;
-}
-
-.lang-caret {
-
-    opacity: 0.8;
-    margin-left: auto;
-}
-
-.lang-popover {
-    position: absolute;
-    top: 110%;
-    left: 0;
-    min-width: 220px;
-    margin: 8px 0 0;
-    padding: 6px 0;
-    list-style: none;
-    background: #0b1220;
-    color: #e5e7eb;
-    border: 1px solid #1f2937;
-    border-radius: 10px;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
-    display: none;
-    z-index: 1000;
-    max-height: 280px;
-    overflow: auto;
-    scrollbar-width: thin;
-}
-
-.lang-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    cursor: pointer;
-}
-
-.lang-item:hover {
-    background: #111827;
-
-}
-
-.lang-item.is-active {
-    background: #0f172a;
-    border-left: 3px solid var(--accent-color);
-
-}
-
-.lang-item .lang-icon {
-    height: 24px;
-    width: 24px;
-
-}
-
-.lang-select.is-open .lang-popover {
-    display: block;
-}
-
-/* TABBAR FILE */
-
-.file-tabbar {
-    height: 40px;
-    background: #1e1e1e;
-    color: #ddd;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px solid #2a2a2a;
-    padding: 0 8px;
-    gap: 8px;
-}
-
-.file-tabs {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    flex: 1;
-    overflow-x: auto;
-    scrollbar-width: thin;
-    white-space: nowrap;
-}
-
+/* 4. TABBAR (TAB FILE) - Giống hệt file gốc */
 .file-tab {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    height: 28px;
-    padding: 0 10px;
-    border: 1px solid #3a3a3a;
-    border-radius: 4px;
-    background: #2a2a2a;
-    color: #ddd;
-    cursor: pointer;
-    user-select: none;
+    height: 28px; padding: 0 10px; margin-right: 2px;
+    background-color: #2d2d2d; /* Màu xám của tab chưa active */
+    color: #969696;
+    border: 1px solid transparent; 
+    border-radius: 3px 3px 0 0;
+    cursor: pointer; display: flex; align-items: center; gap: 6px;
 }
-
-.file-tab:hover {
-    background: #333;
-
-}
-
+.file-tab:hover { background-color: #3a3a3a; color: #fff; }
 .file-tab.active {
-    background: #008c8c;
-    border-color: #138d83;
+    background-color: var(--bg-main); /* Tab active trùng màu nền editor */
     color: #fff;
+    border-top: 2px solid var(--accent); /* Viền trên màu xanh */
 }
 
-.file-tab .lang-icon {
-    font-size: 12px;
-    opacity: 0.8;
-}
-
-.file-tab .name {
-    font-weight: 600;
-}
-
-.file-tab .close {
-    margin-left: 4px;
-    font-weight: bold;
-    opacity: 0.7;
-}
-
-.file-tab .close:hover {
-    opacity: 1;
-
-}
-
-.tab-add {
-    height: 28px;
-    width: 28px;
-    border-radius: 6px;
-    border: 1px dashed #3a3a3a;
-    background: #242424;
-    color: #ddd;
-    cursor: pointer;
-}
-
-.tab-add:hover {
-    background: #2e2e2e;
-
-}
-
-/* Menu save*/
-
-.save-menu-container {
-    position: relative;
-}
-
-.save-popover {
-    position: absolute;
-    top: 110%;
-    right: 0;
-    min-width: 160px;
-    margin: 8px 0 0;
-    padding: 6px 0;
-    list-style: none;
-    background: #0b1220;
-    color: #e5e7eb;
-    border: 1px solid #1f2937;
-    border-radius: 10px;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
-    font-size: 14px;
-    z-index: 1000;
-}
-
-.save-popover.hidden {
-    display: none;
-}
-
-.save-popover li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    cursor: pointer;
-}
-
-.save-popover li:hover {
-    background: #111827;
-}
-/* Dark Mode Styles */
-
-body.theme-light {
-    --accent-color: #007bff;
-    --accent-hover: #0069d9;
-    --accent-active: #005cbf;
-
-    --bg-topbar: #ffffff;
-    --fg-topbar: #212529;
-    --border-topbar: #e7e7e7;
-    
-    --btn-dark: #f8f9fa;
-    --btn-dark-border: #dee2e6;
-    --btn-dark-hover: #e2e6ea;
-
-    --dark-1: #f8f9fa; /* Nền tab file */
-    --dark-2: #e9ecef; /* Nền popover */
-    --dark-br: #dee2e6; /* Border */
-}
-
-/* Các thành phần cần đổi màu riêng */
-body.theme-light .workbench,
-body.theme-light .terminal-panel,
-body.theme-light .terminal-body,
-body.theme-light .editor {
-    background: #ffffff;
-    color: #212529;
-}
-
-body.theme-light .term-toolbar {
-    background: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-}
-
-body.theme-light .gutter {
-    background: #e9ecef;
-    box-shadow: none;
-    border-left: 1px solid #dee2e6;
-    border-right: 1px solid #dee2e6;
-}
-
-body.theme-light .file-tabbar {
-    background: #f8f9fa;
-    color: #212529;
-    border-bottom: 1px solid #dee2e6;
-}
-body.theme-light .file-tab {
-    background: #e9ecef;
-    border: 1px solid #dee2e6;
-    color: #495057;
-}
-body.theme-light .file-tab.active {
-    background: var(--accent-color);
-    border-color: var(--accent-color);
-    color: #fff;
-}
-
-body.theme-light .lang-popover {
-    background: #ffffff;
-    color: #212529;
-    border: 1px solid #dee2e6;
-}
-body.theme-light .lang-item:hover {
-    background: #f8f9fa;
-}
-
-body.theme-light .lang-trigger {
-    background: var(--dark-1);
-    color: var(--fg-topbar);
-    border: 1px solid var(--dark-br);
-}
-
-/* Modal (Popup) */
-body.theme-light .modal-content {
-    background: #ffffff;
-    color: #212529;
-    border: 1px solid #dee2e6;
-}
-body.theme-light .modal-content h3 {
-    border-bottom: 1px solid #e9ecef;
-}
-body.theme-light .modal-input {
-    background: #f8f9fa;
-    border: 1px solid #ced4da;
-    color: #212529;
-}
-body.theme-light .save-option-btn {
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
-    color: #212529;
-}
-body.theme-light .save-option-btn:hover {
-    background: #e9ecef;
-    border-color: var(--accent-color);
-}
-body.theme-light .modal-btn-cancel {
-    background: #6c757d;
-    color: #fff;
-}
-body.theme-light .modal-btn-cancel:hover {
-    background: #5a6268;
-}
-
-/* 9. CÂY THƯ MỤC (FILE EXPLORER) */
-
-.file-explorer {
-    grid-area: explorer;
-    background-color: var(--dark-1,#1e1e1e);
-    border-right: 1px solid var(--dark-br,#374151);
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-
-}
-
-.file-explorer-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px 0 15px;
-    height: 40px;
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--fg-topbar,#e5e7eb);
-    border-bottom: 1px solid var(--dark-br,#374151);
-    flex-shrink: 0;
-}
-
-.file-explorer-header .icon-btn{
-    height: 28px;
-    width: 28px;
-    font-size: 20px;
-    background: transparent;
-    border: none;
-
-}
-
-.file-explorer-header .icon-btn:hover{
-    background: var(--dark-2,#2a2a2a);
-}
-
-.file-tree-list{
-    list-style: none;
-    padding: 8px;
-    margin: 0;
-    overflow: auto;
-    flex: 1;
-}
-
-.file-tree-list li{
-    margin-bottom: 4px;
-}
-
-.file-item{
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 6px 8px;
-    background: transparent;
-    border: none;
-    border-radius: 5px;
-    color: var(--fg-topbar,#e5e7eb);
-    cursor: pointer;
-    text-align: left;
-    gap: 8px;
-}
-.file-item:hover{
-    background: var(--dark-2,#2a2a2a);
-}
-.file-item.active{
-    background: var(--accent-color,#008c8c);
-    font-weight: 600;
-    color: #fff;
-}
-/* Icon thư mục và tệp tin */
-
-.file-explorer-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 8px 0 15px;
-    height: 35px;
-    background: var(--dark-1);
-    font-size: 12px;
-    font-weight: bold;
-    color: #bbb;
-}
-
-.explorer-actions {
-    display: flex;
-    gap: 5px;
-}
-
-.explorer-actions .icon-btn {
-    width: 24px;
-    height: 24px;
-    font-size: 16px;
-    border-radius: 3px;
-    color: #bbb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-
-}
-
-.explorer-actions .icon -btn:hover {
-   background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-}
-
-/* Icon thư mục và tệp tin hien va an */
-
-.tree-item-folder > .nested {
-    display: none;
-   padding-left: 15px;
-   border-left: 1px solid #333;
-}
-
-.tree-item-folder.open > .nested {
-    display: block;
-}
-
-.tree-item-folder::after{
-  
-    float: right;
-    font-size: 10px;
-    transition: transform 0.2s;
-}
-
-.tree-item-folder.open > .tree-item-folder::after {
-    transform: rotate(90deg);
-}
-/* ======================================== */
-/* 10. INLINE INPUT (GIỐNG VS CODE)
-/* ======================================== */
-
-.tree-item-input {
-    width: calc(100% - 20px); /* Trừ lề */
-    background: #3c3c3c; /* Màu nền input giống VS Code */
-    color: #fff;
-    border: 1px solid var(--accent-color); /* Viền xanh khi gõ */
-    outline: none;
-    padding: 2px 5px;
-    margin-left: 22px; /* Thụt đầu dòng cho thẳng hàng với file */
-    font-size: 13px;
-    font-family: inherit;
-    border-radius: 2px;
-}
-
-/* --- ICON FILE ĐẸP (VS CODE STYLE) --- */
-.file-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 6px;
-    vertical-align: middle;
-    object-fit: contain; /* Để icon không bị méo */
-}
-
-/* Chỉnh lại ô nhập liệu Inline cho đẹp hơn */
-.tree-item-input {
-    background: #3c3c3c;
-    color: #fff;
-    border: 1px solid #007acc; /* Viền xanh chuẩn VS Code */
-    outline: none;
-    padding: 2px 4px;
-    font-size: 13px;
-    font-family: inherit;
-    width: calc(100% - 24px);
-    margin-left: 20px;
-}
-
-/* --- 10. Ô NHẬP LIỆU TRÊN CÂY (INLINE INPUT) --- */
-/* --- 10. Ô NHẬP LIỆU & ICON (FIXED) --- */
-
-/* Khung bao quanh Icon + Input */
-.tree-item-input-wrapper {
-    display: flex;          /* Xếp ngang hàng */
-    align-items: center;    /* Căn giữa dọc */
-    padding: 4px 10px;      /* Căn lề giống các file khác */
-    gap: 6px;               /* Khoảng cách giữa Icon và Input */
-}
-
-/* Icon trong lúc nhập */
-.tree-item-input-wrapper .file-icon {
-    width: 16px;
-    height: 16px;
-    object-fit: contain;
-    flex-shrink: 0; /* Không bị bóp méo */
-}
-
-/* Ô nhập liệu */
-.tree-item-input {
-    flex: 1;                /* Chiếm hết khoảng trống còn lại */
-    background: #3c3c3c;    /* Nền tối */
-    color: #fff;
-    border: 1px solid #007acc; /* Viền xanh */
-    outline: none;
-    padding: 2px 4px;
-    font-size: 13px;
-    font-family: inherit;
-    border-radius: 2px;
-    min-width: 0; /* Tránh bị tràn */
-}
-
-.file-tree-list {
-    /* Code cũ... */
-    overflow-x: hidden; /* Ẩn thanh cuộn ngang */
-    white-space: nowrap; /* Không xuống dòng */
-    text-overflow: ellipsis; /* Nếu dài quá thì hiện ... */
-}
-/* Icon mặc định (giấy trắng) */
-.file-icon.default-file {
-    filter: grayscale(100%) brightness(1.5); /* Làm cho nó trắng ra */
-    opacity: 0.7;
-}
-/* Modal Confirm Move */
-.confirm-modal-content {
-    background: #252526;
-    color: #ccc;
-    padding: 20px;
-    border-radius: 5px;
-    width: 400px;
-    border: 1px solid #454545;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-}
-.confirm-checkbox-label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 15px;
-    font-size: 13px;
-    cursor: pointer;
-    user-select: none;
-}
-.confirm-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-.btn-primary {
-    background-color: #007acc;
-    color: white;
-}
-.btn-secondary {
-    background-color: #3c3c3c;
-    color: #ccc;
-}
-
-/* Context Menu */
-.context-menu {
-    position: absolute;
-    background: #252526;
-    border: 1px solid #454545;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.5);
-    border-radius: 5px;
-    padding: 5px 0;
-    list-style: none;
-    min-width: 150px;
-    z-index: 9999; /* Nằm trên cùng */
-}
-
-.context-menu.hidden {
-    display: none;
-}
-/* ======================================== */
-/* SIDEBAR (CÂY THƯ MỤC) - BẢN CHUẨN */
-/* ======================================== */
-
-.file-explorer {
-    grid-area: explorer;
-    background-color: var(--dark-1, #1e1e1e);
-    border-right: 1px solid var(--dark-br, #374151);
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-    color: #cccccc;
-}
-
-/* --- HEADER --- */
-.file-explorer-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
-    height: 35px;
-    background-color: #252526;
-    border-bottom: 1px solid #333;
-    font-size: 11px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    color: #bbb;
-    flex-shrink: 0;
-}
-
-.explorer-actions {
-    display: flex;
-    gap: 2px;
-}
-
-.explorer-actions .icon-btn {
-    width: 20px;
-    height: 20px;
-    font-size: 14px;
-    border: none;
-    background: transparent;
-    color: #bbb;
-    border-radius: 3px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.explorer-actions .icon-btn:hover {
-    background: rgba(255,255,255,0.1);
-    color: #fff;
-}
-
-/* --- DANH SÁCH FILE --- */
-.file-tree-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    overflow-y: auto;
-    overflow-x: hidden; /* Ẩn thanh cuộn ngang */
-    flex: 1;
-}
-
-/* Folder & File Items */
+/* 5. SIDEBAR ITEM (CÂY THƯ MỤC) */
 .tree-item {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    padding: 4px 10px;
-    background: transparent;
-    border: none;
-    color: #cccccc;
-    text-align: left;
-    font-size: 13px;
-    cursor: pointer;
-    gap: 6px; /* Khoảng cách icon và chữ */
-    
-    /* Xử lý tên dài */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 4px 10px; cursor: pointer; display: flex; align-items: center; gap: 6px;
+    color: var(--text-main); white-space: nowrap; overflow: hidden;
 }
-.tree-item:hover {
-    background-color: #2a2d2e;
-    color: #fff;
-}
+.tree-item:hover { background-color: #2a2d2e; color: #fff; }
 .tree-item.active {
     background-color: #37373d;
     color: #fff;
-    border-left: 2px solid var(--accent-color, #008c8c);
+    border-left: 2px solid var(--accent);
 }
 
-/* Icon File */
-.tree-item .file-icon {
-    width: 16px;
-    height: 16px;
-    object-fit: contain;
-    flex-shrink: 0; /* Không bị méo */
+/* 6. NÚT BẤM (BUTTONS) - Style gốc */
+.btn-dark-pill, .icon-btn {
+    height: 30px; padding: 0 12px;
+    background: var(--btn-bg); color: #fff;
+    border: 1px solid var(--btn-border); border-radius: 4px;
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
 }
+.btn-dark-pill:hover, .icon-btn:hover { background: var(--btn-hover); }
 
-/* Logic Đóng/Mở Folder */
-.tree-item-folder > .nested {
-    display: none;
-    padding-left: 15px;
-    border-left: 1px solid #333;
-    margin: 0;
-    list-style: none;
+.btn-accent-pill, .btn-run-accent {
+    height: 30px; padding: 0 14px;
+    background: var(--accent); color: #fff;
+    border: 1px solid var(--accent); border-radius: 4px;
+    font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
 }
-.tree-item-folder.open > .nested {
-    display: block;
-}
-.tree-item.folder::after {
-    content: '▸';
-    float: right;
-    font-size: 10px;
-    margin-left: auto;
-    transition: transform 0.1s;
-}
-.tree-item-folder.open > .tree-item.folder::after {
-    transform: rotate(90deg);
-}
+.btn-accent-pill:hover { background: #007a7a; }
 
-/* --- INPUT NHẬP LIỆU (INLINE) - ĐÃ SỬA --- */
+/* 7. ACE EDITOR OVERRIDE (BẮT BUỘC ĐỂ GIỐNG CŨ) */
+/* Đoạn này ép Editor không bị lệch màu rêu */
+.ace_editor, .ace-monokai, .ace-monokai .ace_gutter, .ace-monokai .ace_scroller, .ace-monokai .ace_content {
+    background-color: var(--bg-main) !important; /* #1e1e1e */
+    color: #d4d4d4 !important;
+}
+.ace-monokai .ace_marker-layer .ace_active-line { background-color: #282828 !important; }
+.ace-monokai .ace_gutter-active-line { background-color: transparent !important; }
+.ace-monokai .ace_cursor { color: #aeafad !important; border-left: 2px solid #aeafad !important; }
 
-.tree-item-input-wrapper {
-    display: flex;
-    align-items: center;
-    padding: 4px 10px;
-    gap: 6px;
-}
+/* 8. TIỆN ÍCH KHÁC */
+.gutter { background: var(--bg-main); border-left: 1px solid var(--border-color); }
+.hidden { display: none !important; }
 
-.tree-item-input-wrapper .file-icon {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
+/* Menu chuột phải & Popup */
+.context-menu, .save-popover, .modal-content {
+    background: #252526; border: 1px solid #454545; 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 9999; border-radius: 4px;
 }
+.context-menu li { padding: 6px 15px; cursor: pointer; display: flex; gap: 8px; color: #ccc; }
+.context-menu li:hover { background-color: #04395e; color: #fff; }
+/* --- NÚT BẤM STYLE CŨ (BO TRÒN, VIỀN MỎNG) --- */
 
-.tree-item-input {
-    flex: 1; /* Chiếm hết chỗ còn lại */
-    background: #3c3c3c;
-    color: #fff;
-    border: 1px solid #007acc;
-    outline: none;
-    padding: 2px 4px;
-    font-size: 13px;
-    font-family: inherit;
-    border-radius: 2px;
-    min-width: 0; /* Tránh tràn */
+.btn-dark-pill, .icon-btn {
+    height: 36px; padding: 0 12px;
+    background: var(--btn-dark-bg);
+    color: #e5e7eb;
+    border: 1px solid var(--btn-dark-border);
+    border-radius: 10px; /* Bo tròn như cũ */
+    cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
 }
-.context-menu li {
-    padding: 6px 15px;
-    cursor: pointer;
-    font-size: 13px;
-    color: #cccccc;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
+.btn-dark-pill:hover, .icon-btn:hover { background: var(--btn-dark-hover); }
 
-.context-menu li:hover {
-    background-color: #094771; /* Màu xanh khi hover giống VS Code */
-    color: white;
+.btn-accent-pill, .btn-run-accent {
+    height: 36px; padding: 0 16px;
+    background: var(--accent-color); color: #fff;
+    border: 1px solid var(--accent-color);
+    border-radius: 10px; /* Bo tròn như cũ */
+    font-weight: 600; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.3);
 }
+.btn-accent-pill:hover, .btn-run-accent:hover { background: #007a7a; }
 
-.context-menu .separator {
-    height: 1px;
-    background: #454545;
-    margin: 4px 0;
-    padding: 0;
+/* Menu chuột phải & Popup */
+.context-menu, .save-popover, .lang-popover {
+    position: absolute; background: #111827; /* Nền xanh than */
+    border: 1px solid #374151; border-radius: 10px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); z-index: 9999;
 }
-
-/* --- BREADCRUMBS (ĐƯỜNG DẪN FILE) --- */
-.breadcrumbs {
-    height: 22px;
-    background-color: #1e1e1e; /* Trùng màu nền editor */
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    font-size: 13px;
-    color: #969696;
-    border-bottom: 1px solid #2b2b2b; /* Đường kẻ mờ ngăn cách với code */
+.context-menu li, .save-popover li {
+    padding: 8px 12px; cursor: pointer; display: flex; gap: 10px; color: #e5e7eb;
 }
-
-.breadcrumb-item {
-    cursor: pointer;
-}
-
-.breadcrumb-item:hover {
-    color: #e0e0e0;
-}
-
-.breadcrumb-item.active {
-    color: #e0e0e0; /* File đang mở sáng hơn */
-}
-
-.breadcrumb-separator {
-    margin: 0 6px;
-    font-size: 14px;
-}
+.context-menu li:hover { background: #1f2937; }
