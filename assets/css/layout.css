@@ -207,165 +207,61 @@ body.theme-light .status-bar {
 /* ========================================================== */
 
 @media (max-width: 1024px) {
-
+    /* Layout Mobile: 1 Cột, Sidebar Ẩn, Terminal Dưới */
     .layout {
         display: grid !important;
         grid-template-columns: 50px 1fr !important;
-
-
         grid-template-rows: 1fr 10px 200px;
-
-        grid-template-areas:
-            "activity workbench"
-            "activity gutter"
-            /* <-- Thêm vùng này */
-            "activity terminal" !important;
-
+        grid-template-areas: "activity workbench" "activity gutter" "activity terminal" !important;
         height: calc(100vh - 48px) !important;
         overflow: hidden;
-
-   
     }
 
-    /* 2. HIỆN THANH KÉO (GUTTER) ĐỂ KÉO DỌC */
+    /* Gutter: Hiện để kéo terminal */
     .gutter {
-        display: block !important;
-        /* Bắt buộc hiện */
-        grid-area: gutter;
-        cursor: row-resize !important;
-        /* Con trỏ kéo dọc */
-        background-color: #1e1e1e;
-        border-top: 1px solid #333;
-        border-bottom: 1px solid #333;
-        width: 100%;
-        height: 100%;
-        z-index: 100;
+        display: block !important; grid-area: gutter; cursor: row-resize !important;
+        background-color: #1e1e1e; border-top: 1px solid #333; height: 100%; width: 100%; z-index: 100;
     }
 
-    /* 2. HIỆN LẠI LOGO */
-    .logo {
-        display: flex !important;
-        /* Bắt buộc hiện */
-        max-width: 120px;
-        /* Giới hạn chiều rộng để không đẩy nút khác */
-        overflow: hidden;
-    }
+    /* Topbar Compact */
+    .topbar { padding: 0 5px; gap: 5px; }
+    .brand-logo { height: 24px; }
+    #userDisplay { display: none !important; }
 
-    .brand-logo {
-        height: 24px;
-        /* Thu nhỏ logo chút cho vừa điện thoại */
-    }
-
-    /* Chỉnh Topbar cho đỡ chật */
-    .topbar {
-        padding: 0 5px;
-        gap: 5px;
-    }
-
-    /* Ẩn bớt tên User nếu chật quá, chỉ hiện nút Đăng xuất */
-    #userDisplay {
-        display: none !important;
-    }
-
-    /* 3. TERMINAL: Cố định ở dưới */
+    /* Terminal Mobile */
     .terminal-panel {
-        grid-area: terminal;
-        display: flex !important;
-        background-color: #1e1e1e;
-        border-top: 1px solid #333;
-        z-index: 10;
-        min-height: 0;
+        grid-area: terminal; display: flex !important;
+        background-color: #1e1e1e; border-top: 1px solid #333; z-index: 10; min-height: 0;
     }
 
-    /* 4. SIDEBAR (Cây thư mục): Trôi nổi (Overlay) */
-    /* Khi dùng điện thoại, Sidebar sẽ ẩn đi, bấm nút mới hiện đè lên */
+    /* Sidebar: Overlay Mode */
     .file-explorer {
-        position: fixed !important;
-        top: 48px;
-        left: 50px;
-        bottom: 0;
-        width: 80% !important;
-        /* Rộng 80% màn hình điện thoại cho dễ bấm */
-        max-width: 300px;
-        z-index: 9999;
-        /* Đè lên tất cả */
-
-        background-color: #1e1e1e;
-        border-right: 1px solid #444;
-        box-shadow: 10px 0 30px rgba(0, 0, 0, 0.8);
-
+        position: fixed !important; top: 48px; left: 50px; bottom: 0;
+        width: 80% !important; max-width: 300px; z-index: 9999;
+        background-color: #1e1e1e; border-right: 1px solid #444;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.5);
         display: none !important;
-        /* Mặc định ẩn */
     }
+    .file-explorer.mobile-visible { display: flex !important; }
 
-    .file-explorer.mobile-open {
-        display: flex !important;
-        /* Hiện khi có class này */
-    }
-
-    /* Reset lại vị trí cho tất cả các modal */
-    .modal-content,
-    .project-modal-box {
-        /* Kích thước */
-        width: 90% !important;
-        /* Chiếm 90% chiều ngang */
-        max-width: 400px !important;
-        /* Không quá to */
-        height: auto !important;
-        /* Chiều cao tự động */
-        max-height: 80vh !important;
-        /* Tối đa 80% màn hình */
-
-        /* Căn giữa tuyệt đối (Centering Trick) */
-        position: fixed !important;
-        top: 50% !important;
-        left: 50% !important;
+    /* Modals Centering Fix */
+    .modal-content, .project-modal-box {
+        position: fixed !important; top: 50% !important; left: 50% !important;
         transform: translate(-50%, -50%) !important;
-        /* Dịch ngược lại 50% kích thước của nó */
-
-        /* Reset margin cũ */
-        margin: 0 !important;
-
-        /* Đảm bảo nó nổi lên trên cùng */
-        z-index: 10000 !important;
-
-        /* Cho phép cuộn nội dung bên trong nếu dài quá */
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
+        width: 90% !important; max-width: 400px !important;
+        max-height: 80vh !important; margin: 0 !important;
+        z-index: 10000 !important; display: flex; flex-direction: column;
     }
 
-    /* Phần danh sách dự án cần cuộn được */
-    .pm-body,
-    #projectListContainer {
-        flex: 1;
-        overflow-y: auto;
-        min-height: 150px;
-        /* Đảm bảo có chỗ để hiện */
-    }
-
-    /* Nút bấm xếp dọc cho dễ bấm */
-    .pm-footer,
-    .modal-actions {
-        flex-direction: column-reverse;
-        gap: 10px;
-        padding: 10px;
-    }
-
-    .pm-footer button,
-    .modal-actions button {
-        width: 100%;
-    }
-
-    .project-actions {
-        opacity: 1 !important;
-    }
-
-    .delete-project-btn {
-        opacity: 1 !important;
-    }
-
+    .pm-body, #projectListContainer { flex: 1; overflow-y: auto; min-height: 150px; }
     
+    .pm-footer, .modal-actions {
+        flex-direction: column-reverse; gap: 10px; padding: 10px;
+    }
+    .pm-footer button, .modal-actions button { width: 100%; }
+
+    /* Force Show Actions on Mobile */
+    .project-actions, .delete-project-btn { opacity: 1 !important; }
 }
 
 .project-actions {
@@ -400,10 +296,8 @@ body.theme-light .status-bar {
     color: #ff6b6b;
 }
 
-/* --- FIX LỖI Z-INDEX (Bảng Xóa phải cao hơn Bảng Dự án) --- */
 #deleteConfirmModal {
     z-index: 99999 !important;
-    /* Cao hơn 10000 */
 }
 
 /* Trong style.css */

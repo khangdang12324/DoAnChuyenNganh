@@ -619,96 +619,84 @@ export class AppController {
         return modeMap[ext] || 'ace/mode/text';
     }
 
-    async runCode() {
+  async runCode() {
         const path = this.model.activePath;
-        if (!path) return this.view.logTerminal("Vui lòng chọn file để chạy!", "warn");
+        if (!path) return this.view.logTerminal("Chọn file để chạy!", "warn");
 
-        // 1. Lấy nội dung code từ Editor
-        const session = this.model.fileSessions[path];
-        if (!session) return;
-        const code = session.getValue();
-
-        // 2. TỰ ĐỘNG NHẬN DIỆN NGÔN NGỮ QUA ĐUÔI FILE
+        const code = this.model.fileSessions[path].getValue();
+        // Lấy đuôi file và chuyển về chữ thường
         const ext = path.split('.').pop().toLowerCase();
+        
+        let lang = 'javascript'; 
 
-        let lang = 'javascript'; // Mặc định là JS nếu không nhận diện được
+        // --- BẢN ĐỒ NGÔN NGỮ (FIX LỖI CỦA BẠN TẠI ĐÂY) ---
+        switch (ext) {
+            // 1. NHÓM THỰC THI (Backend chạy được)
+            case 'py': case 'python': 
+                lang = 'python'; break;
+            
+            case 'cpp': case 'c': case 'h': case 'hpp': case 'c++':
+                lang = 'cpp'; break;
+            
+            case 'js': case 'javascript':
+                lang = 'javascript'; break;
+            
+            case 'ts': case 'typescript':
+                lang = 'typescript'; break;
+            
+            case 'java': case 'class':
+                lang = 'java'; break;
+            
+            case 'php': 
+                lang = 'php'; break;
+            
+            case 'go': case 'golang':
+                lang = 'go'; break;
+            
+            // Fix lỗi .ruby và .rb
+            case 'rb': case 'ruby':
+                lang = 'ruby'; break;
+            
+            // Fix lỗi .c# và .cs
+            case 'cs': case 'csharp': case 'c#':
+                lang = 'csharp'; break;
 
-     // Trong hàm runCode()
-switch (ext) {
-    // --- NHÓM 1: C/C++ ---
-    case 'cpp': 
-    case 'c':
-    case 'h': 
-    case 'hpp':
-        lang = 'cpp'; 
-        break;
+            // 2. NHÓM KHÔNG THỰC THI (Chỉ hiển thị)
+            case 'html': case 'htm':
+            case 'css': case 'scss': case 'less':
+            case 'json': 
+            case 'xml': 
+            case 'sql':
+            case 'md': 
+            case 'txt':
+                this.view.logTerminal(`[INFO] File đuôi .${ext} là dạng dữ liệu/giao diện.\nKhông thể chạy (Execute) trên Server.`, "info");
+                return; // Dừng lại, không gửi về server
 
-    // --- NHÓM 2: JAVA ---
-    case 'java': 
-        lang = 'java'; 
-        break;
+            default:
+                this.view.logTerminal(`Chưa hỗ trợ chạy file đuôi .${ext}`, "warn");
+                return;
+        }
 
-    // --- NHÓM 3: PYTHON ---
-    case 'py': 
-        lang = 'python'; 
-        break;
-
-    // --- NHÓM 4: WEB/SCRIPT ---
-    case 'js': 
-        lang = 'javascript'; 
-        break;
-    case 'ts': 
-        lang = 'typescript'; // QUAN TRỌNG: Phải gửi là 'typescript'
-        break;
-    case 'php':
-        lang = 'php';
-        break;
-    case 'rb':
-        lang = 'ruby';
-        break;
-    case 'go':
-        lang = 'go';
-        break;
-    case 'cs':
-        lang = 'csharp';
-        break;
-
-    default: 
-        this.view.logTerminal(`Frontend chưa hỗ trợ chạy file .${ext}`, "warn");
-        return;
-}
-
-        // 3. Gửi về Server
+        // --- GỬI VỀ SERVER ---
         this.view.clearTerminal();
-        this.view.logTerminal(`Running (${lang})...`, "info");
-
+        this.view.logTerminal(`Running ${lang}...`, 'info');
+        
         try {
-            // Gửi request POST tới server
             const res = await fetch(`${this.model.BASE_URL}/run`, {
-                method: 'POST',
+                method: 'POST', 
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    language: lang, // Gửi đúng tên ngôn ngữ (python, cpp, javascript...)
-                    code: code
-                })
+                body: JSON.stringify({ language: lang, code })
             });
-
+            
             const data = await res.json();
-
-            // Xóa chữ Running...
+            
             this.view.clearTerminal();
-
-            // 4. Hiển thị kết quả
-            if (data.output) {
-                this.view.logTerminal(data.output, 'output');
-            }
-            if (data.error) {
-                this.view.logTerminal(data.error, 'error'); // Lỗi biên dịch/chạy
-            }
-
-        } catch (e) {
-            this.view.logTerminal("Lỗi kết nối tới Server Backend!", 'error');
-            console.error(e);
+            
+            if (data.output) this.view.logTerminal(data.output, 'output');
+            if (data.error) this.view.logTerminal(data.error, 'error');
+            
+        } catch (e) { 
+            this.view.logTerminal("Lỗi kết nối Server!", 'error'); 
         }
     }
 

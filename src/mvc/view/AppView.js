@@ -194,9 +194,35 @@ export class AppView {
     }
 
     // --- CORE RENDER (GIỮ NGUYÊN) ---
+  // Trong src/mvc/view/AppView.js
+
     renderTree(vfs, activePath, callbacks) {
         const container = this.elements.fileTree;
         container.innerHTML = '';
+
+        // --- 1. SỬA LỖI: CHO PHÉP KÉO RA NGOÀI (ROOT) ---
+        // Khi kéo file vào vùng trống của cây thư mục -> Chuyển về Root
+        container.ondragover = (e) => {
+            e.preventDefault(); // Bắt buộc để cho phép Drop
+            container.style.boxShadow = "inset 0 0 0 2px #008c8c"; // Hiệu ứng viền khi kéo vào
+        };
+
+        container.ondragleave = (e) => {
+            container.style.boxShadow = "none";
+        };
+
+        container.ondrop = (e) => {
+            e.preventDefault();
+            container.style.boxShadow = "none";
+            
+            // Nếu sự kiện Drop này chưa bị Folder con bắt lấy (stopPropagation)
+            // Thì nghĩa là người dùng thả vào vùng trống -> Chuyển về Root ('')
+            if (callbacks.onDrop) {
+                callbacks.onDrop(''); // '' đại diện cho thư mục gốc
+            }
+        };
+        // -----------------------------------------------------
+
         this._renderNode(vfs, container, '', activePath, callbacks);
     }
     _renderNode(treeNode, container, parentPath, activePath, callbacks) {
@@ -250,10 +276,64 @@ export class AppView {
 
     _getFileIcon(filename) {
         const parts = filename.split('.');
-        if (parts.length === 1) return 'https://res.cloudinary.com/dqkysbzie/image/upload/v1764231397/images_k53nq1.png';
+        // Icon mặc định nếu không có đuôi
+        if (parts.length === 1) return 'https://unpkg.com/material-icon-theme/icons/file.svg';
+        
         const ext = parts.pop().toLowerCase();
-        const map = { py: 'python', js: 'javascript', html: 'html', css: 'css', java: 'java', cpp: 'cpp' };
-        return `https://raw.githubusercontent.com/PKief/vscode-material-icon-theme/main/icons/${map[ext] || 'file'}.svg`;
+        
+        // Map đuôi file -> Tên icon
+        const iconMap = {
+            // C / C++ / C#
+            'c': 'c',
+            'h': 'c',
+            'cpp': 'cpp',
+            'hpp': 'cpp',
+            'cs': 'csharp', 
+            'csharp': 'csharp',
+
+            // Web
+            'html': 'html',
+            'htm': 'html',
+            'css': 'css',
+            'scss': 'sass',
+            'js': 'javascript',
+            'ts': 'typescript',
+            'jsx': 'react',
+            'tsx': 'react_ts',
+            'json': 'json',
+            'xml': 'xml',
+            'php': 'php', 
+
+            // Backend / App
+            'py': 'python',
+            'java': 'java',
+            'class': 'java',
+            'go': 'go',
+            'rb': 'ruby',
+            'rs': 'rust',
+            'lua': 'lua',
+            'swift': 'swift',
+            'dart': 'dart',
+            
+            // Config / Data
+            'sql': 'database',
+            'md': 'markdown',
+            'txt': 'document',
+            'zip': 'zip',
+            'rar': 'zip',
+            'git': 'git',
+            'gitignore': 'git',
+            'dockerfile': 'docker',
+            'env': 'tune',
+            'yml': 'yaml',
+            'yaml': 'yaml'
+        };
+
+        const iconName = iconMap[ext] || 'file';
+        
+        // --- SỬ DỤNG UNPKG (CDN CHUẨN CỦA NPM) ---
+        // Link này trỏ trực tiếp vào gói material-icon-theme chính chủ
+        return `https://unpkg.com/material-icon-theme/icons/${iconName}.svg`;
     }
 
     renderProjectList(projects, onSelect, onDelete, onRename) {
