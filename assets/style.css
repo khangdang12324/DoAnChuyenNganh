@@ -133,12 +133,41 @@ body {
 .btn-accent-pill:hover, .btn-run-accent:hover { background: #007a7a; }
 
 /* Menu chuột phải & Popup */
-.context-menu, .save-popover, .lang-popover {
-    position: absolute; background: #111827; /* Nền xanh than */
-    border: 1px solid #374151; border-radius: 10px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); z-index: 9999;
+/* CONTEXT MENU (MENU CHUỘT PHẢI) */
+.context-menu {
+    position: fixed; /* Dùng fixed để không bị che */
+    background: #252526;
+    border: 1px solid #454545;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    border-radius: 6px;
+    padding: 4px 0;
+    list-style: none;
+    min-width: 180px;
+    z-index: 99999; /* Luôn nổi lên trên cùng */
 }
-.context-menu li, .save-popover li {
-    padding: 8px 12px; cursor: pointer; display: flex; gap: 10px; color: #e5e7eb;
+
+.context-menu li {
+    padding: 8px 15px;
+    cursor: pointer;
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; /* Đẩy phím tắt sang phải */
+    color: #cccccc;
+    font-size: 13px;
 }
-.context-menu li:hover { background: #1f2937; }
+
+.context-menu li:hover {
+    background-color: #04395e; /* Màu xanh khi hover */
+    color: white;
+}
+
+.context-menu .separator {
+    height: 1px;
+    background: #454545;
+    margin: 4px 0;
+    padding: 0;
+}
+
+.context-menu.hidden {
+    display: none !important;
+}

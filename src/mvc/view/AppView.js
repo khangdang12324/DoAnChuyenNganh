@@ -194,7 +194,7 @@ export class AppView {
     }
 
     // --- CORE RENDER (GIỮ NGUYÊN) ---
-  // Trong src/mvc/view/AppView.js
+    // Trong src/mvc/view/AppView.js
 
     renderTree(vfs, activePath, callbacks) {
         const container = this.elements.fileTree;
@@ -214,14 +214,13 @@ export class AppView {
         container.ondrop = (e) => {
             e.preventDefault();
             container.style.boxShadow = "none";
-            
-            // Nếu sự kiện Drop này chưa bị Folder con bắt lấy (stopPropagation)
-            // Thì nghĩa là người dùng thả vào vùng trống -> Chuyển về Root ('')
+
+
             if (callbacks.onDrop) {
-                callbacks.onDrop(''); // '' đại diện cho thư mục gốc
+                callbacks.onDrop('');
             }
         };
-        // -----------------------------------------------------
+
 
         this._renderNode(vfs, container, '', activePath, callbacks);
     }
@@ -278,9 +277,9 @@ export class AppView {
         const parts = filename.split('.');
         // Icon mặc định nếu không có đuôi
         if (parts.length === 1) return 'https://unpkg.com/material-icon-theme/icons/file.svg';
-        
+
         const ext = parts.pop().toLowerCase();
-        
+
         // Map đuôi file -> Tên icon
         const iconMap = {
             // C / C++ / C#
@@ -288,7 +287,7 @@ export class AppView {
             'h': 'c',
             'cpp': 'cpp',
             'hpp': 'cpp',
-            'cs': 'csharp', 
+            'cs': 'csharp',
             'csharp': 'csharp',
 
             // Web
@@ -302,7 +301,7 @@ export class AppView {
             'tsx': 'react_ts',
             'json': 'json',
             'xml': 'xml',
-            'php': 'php', 
+            'php': 'php',
 
             // Backend / App
             'py': 'python',
@@ -314,7 +313,7 @@ export class AppView {
             'lua': 'lua',
             'swift': 'swift',
             'dart': 'dart',
-            
+
             // Config / Data
             'sql': 'database',
             'md': 'markdown',
@@ -330,7 +329,7 @@ export class AppView {
         };
 
         const iconName = iconMap[ext] || 'file';
-        
+
         // --- SỬ DỤNG UNPKG (CDN CHUẨN CỦA NPM) ---
         // Link này trỏ trực tiếp vào gói material-icon-theme chính chủ
         return `https://unpkg.com/material-icon-theme/icons/${iconName}.svg`;
@@ -424,7 +423,41 @@ export class AppView {
         this.elements.terminal.scrollTop = this.elements.terminal.scrollHeight;
     }
     // Trong class AppView
+    triggerInlineRename(path, onCommit) {
+        const li = this.elements.fileTree.querySelector(`li[data-path="${path}"]`);
+        if (!li) return;
 
+        const contentDiv = li.querySelector('.tree-item');
+        const oldHTML = contentDiv.innerHTML;
+        const currentName = path.split('/').pop();
+
+        // Thay nội dung bằng ô input
+        contentDiv.innerHTML = `
+            ${oldHTML.split('>')[0]}> <input type="text" class="tree-item-input" value="${currentName}" style="width: calc(100% - 25px);">
+        `;
+
+        const input = contentDiv.querySelector('input');
+        input.focus();
+        input.select(); // Bôi đen toàn bộ tên
+
+        let committed = false;
+        const finish = () => {
+            if (committed) return;
+            committed = true;
+            const v = input.value.trim();
+
+            // Nếu tên mới khác tên cũ thì gọi callback, ngược lại trả về cũ
+            if (v && v !== currentName) onCommit(v);
+            else contentDiv.innerHTML = oldHTML;
+        };
+
+        input.onclick = e => e.stopPropagation();
+        input.onkeydown = e => {
+            if (e.key === 'Enter') finish();
+            if (e.key === 'Escape') { committed = true; contentDiv.innerHTML = oldHTML; }
+        };
+        input.onblur = finish;
+    }
     renderMainEditor(activeFile) {
         // Lấy đúng element từ this.elements hoặc getElementById
         const emptyState = document.getElementById('empty-state');

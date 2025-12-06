@@ -28,107 +28,161 @@ export class AppController {
     }
 
     // --- GẮN SỰ KIỆN ---
-    setupEvents() {
-        // 1. Phím tắt (Shortcuts)
+  setupEvents() {
+        // 1. BẮT SỰ KIỆN BÀN PHÍM (SHORTCUTS)
         document.addEventListener('keydown', (e) => {
-            // Ctrl+S: Lưu (Luôn hoạt động)
+            // Nếu đang gõ chữ trong ô Input hoặc Editor thì KHÔNG chạy phím tắt này
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            if (this.view.editor.isFocused()) return; // Nếu đang code thì để editor lo
+
+            // Ctrl + S (Lưu)
             if (e.ctrlKey && e.key === 's') {
                 e.preventDefault();
                 this.handleSaveProject();
                 return;
             }
 
-            // Các phím tắt khác chỉ chạy khi KHÔNG focus vào Editor/Input
-            const isEditorFocused = this.view.editor.isFocused();
-            if (isEditorFocused || e.target.tagName === 'INPUT') return;
+            // Chỉ chạy các lệnh dưới nếu đã chọn 1 file (contextMenuTarget)
+            if (!this.contextMenuTarget) return;
 
-            if (!this.contextMenuTarget) return; // Phải chọn 1 file trước
-
-            if (e.ctrlKey && e.key === 'c') this.handleCopy();
-            else if (e.ctrlKey && e.key === 'x') this.handleCut();
-            else if (e.ctrlKey && e.key === 'v') this.handlePaste();
-            else if (e.key === 'Delete') this.handleDeleteRequest();
-            else if (e.key === 'F2') this.handleRenameRequest();
-            const ctxDownload = document.getElementById('ctxDownload');
-
-
+            // F2 (Đổi tên)
+            if (e.key === 'F2') {
+                e.preventDefault();
+                this.handleRenameRequest();
+            }
+            // Delete (Xóa)
+            if (e.key === 'Delete') {
+                e.preventDefault();
+                this.handleDeleteRequest();
+            }
+            // Ctrl + C (Copy)
+            if (e.ctrlKey && e.key === 'c') {
+                e.preventDefault();
+                this.handleCopy();
+            }
+            // Ctrl + X (Cut)
+            if (e.ctrlKey && e.key === 'x') {
+                e.preventDefault();
+                this.handleCut();
+            }
+            // Ctrl + V (Paste)
+            if (e.ctrlKey && e.key === 'v') {
+                e.preventDefault();
+                this.handlePaste();
+            }
         });
 
-        // 2. Context Menu (Click)
-        const els = this.view.elements;
-        if (els.ctxDownload) els.ctxDownload.onclick = () => this.handleDownload();
-        if (els.ctxDelete) els.ctxDelete.onclick = () => this.handleDeleteRequest();
-        if (els.ctxRename) els.ctxRename.onclick = () => this.handleRenameRequest();
-        if (ctxDownload) {
-            ctxDownload.addEventListener('click', (e) => {
-                e.stopPropagation();
-                this.handleDownload();
-            });
-        }
-        // Các nút Copy/Cut/Paste trong menu (nếu có HTML)
-        const ctxCopy = document.getElementById('ctxCopy');
-        const ctxCut = document.getElementById('ctxCut');
-        const ctxPaste = document.getElementById('ctxPaste');
-        if (ctxCopy) ctxCopy.onclick = () => this.handleCopy();
-        if (ctxCut) ctxCut.onclick = () => this.handleCut();
-        if (ctxPaste) ctxPaste.onclick = () => this.handlePaste();
+        // 2. BẮT SỰ KIỆN CLICK MENU (CONTEXT MENU ITEMS)
+        const els = this.view.elements || {}; // Đảm bảo không lỗi nếu chưa getElements
+        
+        // Gán sự kiện thủ công nếu view chưa gán
+        const bindClick = (id, handler) => {
+            const el = document.getElementById(id);
+            if (el) el.onclick = (e) => {
+                e.stopPropagation(); // Tránh lan ra ngoài làm đóng menu luôn
+                this.view.hideModal('contextMenu'); // Đóng menu sau khi bấm
+                handler();
+            };
+        };
 
-        // 3. Gọi các nhóm sự kiện khác
+        bindClick('ctxRename', () => this.handleRenameRequest());
+        bindClick('ctxDelete', () => this.handleDeleteRequest());
+        bindClick('ctxCopy', () => this.handleCopy());
+        bindClick('ctxCut', () => this.handleCut());
+        bindClick('ctxPaste', () => this.handlePaste());
+        bindClick('ctxDownload', () => this.handleDownload());
+
+        // 3. CÁC SỰ KIỆN KHÁC (Giữ nguyên code cũ của bạn)
         this._bindSidebarEvents();
         this._bindActionEvents();
         this._bindAuthEvents();
         this._bindProjectEvents();
         this._bindLayoutEvents();
-        this._bindEditorEvents();
-        this._bindContextMenuEvents(); // Logic ẩn hiện menu
+        this._bindContextMenuEvents();
     }
 
     // --- LOGIC COPY / CUT / PASTE / DOWNLOAD ---
 
-    handleCopy() {
-        if (!this.contextMenuTarget) return;
-        this.clipboard = { action: 'copy', path: this.contextMenuTarget };
-        this.view.hideModal('contextMenu');
-    }
-
+  // --- HÀM CẮT (CUT - CTRL+X) ---
     handleCut() {
         if (!this.contextMenuTarget) return;
-        this.clipboard = { action: 'cut', path: this.contextMenuTarget };
-        this.view.hideModal('contextMenu');
+        
+        // 1. Lưu vào bộ nhớ tạm
+        this.clipboard = { 
+            action: 'cut', 
+            path: this.contextMenuTarget 
+        };
+        
+        // 2. Hiệu ứng giao diện (Làm mờ file bị cắt)
+        const li = document.querySelector(`li[data-path="${this.contextMenuTarget}"]`);
+        if (li) li.style.opacity = '0.5';
 
+        // 3. Ẩn menu chuột phải
+        this.view.hideModal('contextMenu');
+        this.view.logTerminal(`Đã cắt: ${this.contextMenuTarget} (Bấm Ctrl+V để dán)`, "info");
     }
 
+    // --- HÀM SAO CHÉP (COPY - CTRL+C) ---
+    handleCopy() {
+        if (!this.contextMenuTarget) return;
+        
+        this.clipboard = { 
+            action: 'copy', 
+            path: this.contextMenuTarget 
+        };
+        
+        // Reset hiệu ứng mờ nếu trước đó có file bị cắt
+        document.querySelectorAll('li').forEach(el => el.style.opacity = '1');
+
+        this.view.hideModal('contextMenu');
+        this.view.logTerminal(`Đã sao chép: ${this.contextMenuTarget}`, "info");
+    }
+
+    // --- HÀM DÁN (PASTE - CTRL+V) ---
     handlePaste() {
-        if (!this.clipboard || !this.contextMenuTarget) return;
+        // 1. Kiểm tra có gì để dán không
+        if (!this.clipboard || !this.clipboard.path) return;
 
-        // Xác định folder đích
-        let targetFolder = this.contextMenuTarget;
+        // 2. Xác định thư mục đích
+        let targetFolder = this.contextMenuTarget; // Mặc định là chỗ chuột đang click
+        
+        // Nếu chuột đang không chọn gì -> Dán vào Root
+        if (!targetFolder) targetFolder = ''; 
+        
+        // Nếu chuột đang chọn File -> Dán vào thư mục cha của file đó
         const node = this.model.findNode(targetFolder);
-
-        // Nếu paste vào file -> Paste vào folder cha của file đó
         if (node && node.node.type === 'file') {
             const parts = targetFolder.split('/');
             parts.pop();
             targetFolder = parts.join('/');
         }
 
+        // 3. Gọi Model thực hiện
         let res;
         if (this.clipboard.action === 'cut') {
+            // DI CHUYỂN
             res = this.model.moveItem(this.clipboard.path, targetFolder);
-            this.clipboard = null; // Cut xong thì xóa
+            if (res.success) {
+                this.clipboard = null; // Cắt xong thì xóa clipboard
+            }
         } else {
+            // SAO CHÉP
             res = this.model.copyItem(this.clipboard.path, targetFolder);
         }
 
+        // 4. Cập nhật giao diện
         if (res.success) {
             this.updateFileTreeUI();
-            this.view.hideModal('contextMenu');
-
+            this.handleSaveProject();
+            this.view.logTerminal(`Đã dán vào: ${targetFolder || 'Root'}`, "success");
         } else {
-            this.view.logTerminal(res.message, 'error');
+            this.view.logTerminal(res.message, "error");
+            // Nếu lỗi thì khôi phục độ mờ
+            document.querySelectorAll('li').forEach(el => el.style.opacity = '1');
         }
+        
+        this.view.hideModal('contextMenu');
     }
-
     // --- XỬ LÝ TẢI FILE ---
     handleDownload() {
         // 1. Ẩn menu
@@ -536,8 +590,6 @@ export class AppController {
     }
 
 
-    // Trong src/mvc/controller/AppController.js
-
     // 1. Sửa lại hàm mở file để nó tự gọi hàm lấy mode
     switchFile(path) {
         const node = this.model.findNode(path);
@@ -545,13 +597,10 @@ export class AppController {
 
         let isNewSession = false;
 
-        // Lazy load session
         if (!this.model.fileSessions[path]) {
             const content = node.node.content || "";
 
-            // --- GỌI HÀM LẤY MODE TỰ ĐỘNG Ở ĐÂY ---
             const mode = this._getAceMode(path);
-            // ---------------------------------------
 
             this.model.fileSessions[path] = ace.createEditSession(content, mode);
             isNewSession = true;
@@ -560,7 +609,6 @@ export class AppController {
         const session = this.model.fileSessions[path];
         this.view.editor.setSession(session);
 
-        // Hiển thị Editor (Code cũ của bạn)
         this.view.renderMainEditor({
             name: node.name,
             path: path,
@@ -569,7 +617,7 @@ export class AppController {
 
         if (isNewSession) this.view.bindSessionEvents(session);
 
-        // ... (Giữ nguyên các phần update UI khác của bạn)
+
         this.model.activePath = path;
         this.updateFileTreeUI();
     }
@@ -754,25 +802,19 @@ export class AppController {
         }
         if (this.view.editor) this.view.editor.resize();
     }
-    // Trong class AppController
+
 
     handleCloseTab(fileId) {
-        // 1. Gọi Model để xóa file khỏi danh sách đang mở
+ 
         this.model.removeOpenTab(fileId);
-
-        // 2. Lấy danh sách tab còn lại
         const remainingTabs = this.model.getOpenTabs();
 
         if (remainingTabs.length > 0) {
-            // Nếu còn tab, active tab cuối cùng (hoặc tab bên cạnh)
             const nextFile = remainingTabs[remainingTabs.length - 1];
             this.view.renderMainEditor(nextFile);
         } else {
-            // QUAN TRỌNG: Nếu hết tab, truyền NULL vào View
             this.view.renderMainEditor(null);
         }
-
-        // Render lại thanh tabbar
         this.view.renderTabs(remainingTabs);
     }
 }
